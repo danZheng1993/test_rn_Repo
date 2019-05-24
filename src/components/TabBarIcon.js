@@ -11,6 +11,11 @@ const Style = StyleSheet.create({
     alignContent: "center",
     alignItems: "center"
   },
+  icon: {
+    width: 20,
+    height: 20,
+    resizeMode: "contain"
+  },
   dot: {
     position: "absolute",
     bottom: -4,
@@ -23,7 +28,7 @@ const Style = StyleSheet.create({
 
 const TabBarIcon = ({ icon, focused }) => (
   <View style={Style.container}>
-    <Image source={icon} />
+    <Image source={icon} style={Style.icon} />
     {focused && <View style={Style.dot} />}
   </View>
 );
