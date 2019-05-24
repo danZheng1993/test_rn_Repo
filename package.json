@@ -1,6 +1,11 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
+  "author": {
+    "name": "Christopher Hernandez",
+    "email": "chris@zionxd.com",
+    "url": "https://chrishernandez.io/"
+  },
   "scripts": {
     "start": "expo start",
     "build": "expo ba --release-channel prod",
