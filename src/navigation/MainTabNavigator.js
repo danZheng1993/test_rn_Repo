@@ -87,9 +87,11 @@ export default createBottomTabNavigator(
   },
   {
     tabBarOptions: {
+      initialRouteName: "Home",
       showLabel: false,
-      activeBackgroundColor: "#000000",
-      inactiveBackgroundColor: "#000000"
+      style: {
+        backgroundColor: "#000000"
+      }
     }
   }
 );
