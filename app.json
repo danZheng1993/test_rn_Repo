@@ -1,29 +1,57 @@
 {
   "expo": {
-    "name": "zion",
+    "name": "Zion",
     "slug": "zion",
     "privacy": "public",
     "sdkVersion": "32.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["android"],
     "version": "1.0.0",
     "orientation": "portrait",
+    "primaryColor": "#C2B48D",
+    "androidStatusBarColor": "#232323",
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ab0200"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.zion",
+      "versionCode": 1,
+      "icon": "./assets/images/icon.png",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "CAMERA_ROLL",
+        "READ_EXTERNAL_STORAGE",
+        "READ_INTERNAL_STORAGE",
+        "RECORD_AUDIO",
+        "VIBRATE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
     "ios": {
       "supportsTablet": true
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "the-authentic-company-inc",
+            "project": "zionxd",
+            "authToken": "efcc26cdf92643daa4d68308a8d13ef9"
+          }
+        }
+      ]
+    },
+    "extra": {
+      "amplitudeApiKey": "XXXX",
+      "sentryDSN": "https://efcc26cdf92643daa4d68308a8d13ef9@sentry.io/1467646"
     }
   }
 }
