@@ -80,10 +80,9 @@ export default class MainScreen extends React.Component {
 
   openInstaLink = async () => {
     const username = `Zion.app`;
-    const url = `intent://instagram.com/_u/${username}/#Intent;package=com.instagram.android;scheme=https;end`;
+    const url = `https://instagram.com/${username}`;
 
     const supported = await Linking.canOpenURL(url);
-
     if (supported) {
       return Linking.openURL(url);
     }
