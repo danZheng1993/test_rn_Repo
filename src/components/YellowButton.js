@@ -11,7 +11,7 @@ const Style = StyleSheet.create({
   },
   text: {
     fontFamily: "CircularProBold",
-    fontSize: 14,
+    fontSize: 12,
     lineHeight: 12,
     color: "#000000"
   }

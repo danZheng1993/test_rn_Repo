@@ -1,23 +1,33 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#2D2D2D"
-  }
-});
+import PhoneLogin from "../components/Login/PhoneLogin";
+import EmailLogin from "../components/Login/EmailLogin";
+import UsernameLogin from "../components/Login/UsernameLogin";
 
-export default class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
 
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>login</Text>
-      </View>
-    );
+    const {
+      navigation: {
+        state: {
+          params: { type }
+        }
+      }
+    } = this.props;
+    switch (type) {
+      case "phone":
+        return <PhoneLogin {...this.props} />;
+      case "email":
+        return <EmailLogin {...this.props} />;
+      case "username":
+        return <UsernameLogin {...this.props} />;
+      default:
+        return <UsernameLogin {...this.props} />;
+    }
   }
 }
+
+export default LoginScreen;
