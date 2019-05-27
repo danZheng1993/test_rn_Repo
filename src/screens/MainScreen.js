@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Linking } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Linking,
+  TouchableWithoutFeedback
+} from "react-native";
 import { YellowButton } from "../components";
 
 const Style = StyleSheet.create({
@@ -29,17 +36,33 @@ const Style = StyleSheet.create({
   headerText: {
     fontFamily: "CircularPro",
     fontSize: 13,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
+    marginRight: 8
+  },
+  headerTextActive: {
+    borderBottomWidth: 1,
+    borderColor: "#FFFFFF"
   },
   logoText: {
     fontFamily: "SangBleuBold",
     fontSize: 49,
-    color: "#C2B48D"
+    color: "#C2B48D",
+    margin: 8
   },
   logoSubtext: {
     fontFamily: "CircularPro",
     fontSize: 15,
-    color: "#C2B48D"
+    color: "#C2B48D",
+    margin: 8
+  },
+  content: {
+    width: "100%",
+    height: "80%",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    textAlign: "center"
   }
 });
 
@@ -72,40 +95,68 @@ export default class MainScreen extends React.Component {
     return (
       <View style={Style.container}>
         <View style={Style.header}>
-          <Image
-            source={require("../../assets/images/social/insta-white.png")}
-            style={Style.headerIcon}
-            onPress={() => this.openInstaLink()}
-          />
+          <TouchableWithoutFeedback onPress={() => this.openInstaLink()}>
+            <Image
+              source={require("../../assets/images/social/insta-white.png")}
+              style={Style.headerIcon}
+            />
+          </TouchableWithoutFeedback>
           <View style={Style.tabContainer}>
-            <Text
-              style={[
-                Style.headerText,
-                activeTab === "login" ? { borderBottom: "1px solid white" } : {}
-              ]}
+            <TouchableWithoutFeedback
+              onPress={() => this.setState({ activeTab: "login" })}
             >
-              LOG IN
-            </Text>
-            <Text
-              style={[
-                Style.headerText,
-                activeTab === "signup"
-                  ? { borderBottom: "1px solid white" }
-                  : {}
-              ]}
+              <Text
+                style={
+                  activeTab === "login"
+                    ? [Style.headerText, Style.headerTextActive]
+                    : Style.headerText
+                }
+              >
+                LOG IN
+              </Text>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={() => this.setState({ activeTab: "signup" })}
             >
-              JOIN US
-            </Text>
+              <Text
+                style={
+                  activeTab === "signup"
+                    ? [Style.headerText, Style.headerTextActive]
+                    : Style.headerText
+                }
+              >
+                JOIN US
+              </Text>
+            </TouchableWithoutFeedback>
           </View>
         </View>
-        <Text style={Style.logoText}>Zion</Text>
-        <Text style={Style.logoSubtext}>A NEW FUTURE</Text>
-        <YellowButton
-          text="GET STARTED"
-          onPress={() => navigation.navigate("Signup")}
-          width={110}
-          height={36}
-        />
+        <View style={Style.content}>
+          <Text style={Style.logoText}>Zion</Text>
+          <Text style={Style.logoSubtext}>A NEW FUTURE</Text>
+          {activeTab === "signup" ? (
+            <YellowButton
+              text="GET STARTED"
+              onPress={() => navigation.navigate("Signup")}
+              width={110}
+              height={36}
+            />
+          ) : (
+            <React.Fragment>
+              <YellowButton
+                text="PHONE"
+                onPress={() => this.goToLogin("phone")}
+              />
+              <YellowButton
+                text="EMAIL"
+                onPress={() => this.goToLogin("email")}
+              />
+              <YellowButton
+                text="USERNAME"
+                onPress={() => this.goToLogin("username")}
+              />
+            </React.Fragment>
+          )}
+        </View>
       </View>
     );
   }
