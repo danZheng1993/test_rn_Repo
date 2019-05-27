@@ -34,11 +34,15 @@ export default class App extends React.Component {
         require("./assets/images/social/insta-white.png")
       ]),
       Font.loadAsync({
-        // This is the font that we are using for our tab bar
-        ...Icon.Ionicons.font,
-        // We include SpaceMono because we use it in HomeScreen.js. Feel free
-        // to remove this if you are not using it in your app
-        "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf")
+        CircularPro: require("./assets/fonts/CircularPro-Medium.otf"),
+        CircularProBold: require("./assets/fonts/CircularPro-Bold.otf"),
+        CircularProBook: require("./assets/fonts/CircularPro-Book.otf"),
+        Gotham: require("./assets/fonts/GothamRounded-Medium.otf"),
+        GothamBold: require("./assets/fonts/GothamRounded-Bold.otf"),
+        GothamBook: require("./assets/fonts/GothamRounded-Book.otf"),
+        GothamLight: require("./assets/fonts/GothamRounded-Light.otf"),
+        SangBleuBlack: require("./assets/fonts/SangBleuEmpire-Black-WebTrial.ttf"),
+        SangBleuBold: require("./assets/fonts/SangBleuEmpire-Bold-WebTrial.ttf")
       })
     ]);
 

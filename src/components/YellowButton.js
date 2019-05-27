@@ -3,8 +3,6 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
 const Style = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
@@ -13,16 +11,21 @@ const Style = StyleSheet.create({
     backgroundColor: "#C2B48D"
   },
   text: {
-    fontFamily: "CircularPro",
+    fontFamily: "CircularProBold",
     fontSize: 11,
     lineHeight: 12,
     color: "#000000"
   }
 });
 
-const YellowButton = ({ onClick, text = "GET STARTED" }) => (
-  <TouchableOpacity onClick={() => onClick()}>
-    <View style={Style.container}>
+const YellowButton = ({
+  onPress,
+  text = "GET STARTED",
+  width = 110,
+  height = 36
+}) => (
+  <TouchableOpacity onPress={() => onPress()}>
+    <View style={[Style.container, { width, height }]}>
       <Text style={Style.text}>{text}</Text>
     </View>
   </TouchableOpacity>
