@@ -8,9 +8,9 @@ import {
   TouchableWithoutFeedback,
   AsyncStorage
 } from "react-native";
-import { StackActions, NavigationActions } from "react-navigation";
 
 import { YellowButton } from "../components";
+import { setDefaultsForApi } from "../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -76,11 +76,13 @@ export default class MainScreen extends React.Component {
 
   state = { activeTab: "signup" };
 
-  componentWillMount = async () => {
+  componentDidMount = async () => {
     const { navigation } = this.props;
 
     // TODO: Check if valid
-    if (AsyncStorage.getItem("session")) {
+    const session = await AsyncStorage.getItem("session");
+    if (session !== null) {
+      await setDefaultsForApi(JSON.stringify(session));
       await navigation.navigate("Home");
     }
   };

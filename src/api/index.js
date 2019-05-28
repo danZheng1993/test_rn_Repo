@@ -20,6 +20,21 @@ const STRIPE_KEY =
 
 axios.defaults.baseURL = API;
 const device = "android";
+let cookies;
+
+export const setDefaultsForApi = async session => {
+  if (session !== null) {
+    cookies = JSON.parse(session);
+    axios.defaults.headers.common.Authorization = `Bearer ${
+      cookies.access_token
+    }`;
+  } else {
+    cookies = { session_id: null, access_token: null };
+    axios.defaults.headers.common.Authorization = `Bearer ${
+      cookies.access_token
+    }`;
+  }
+};
 
 const defaultHeaders = {
   method: "get",
@@ -36,6 +51,22 @@ const getNewDate = () => {
   date = date.slice(0, index);
   return date;
 };
+
+export function getMe() {
+  return axios({
+    ...defaultHeaders,
+    method: "get",
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate(),
+      "Content-Type": "application/json",
+      "x-app-device": device,
+      "x-app-session": `${cookies.session_id}`
+    },
+    url: `/users/me`,
+    data: ""
+  });
+}
 
 export const userNameAvailability = username =>
   axios({
