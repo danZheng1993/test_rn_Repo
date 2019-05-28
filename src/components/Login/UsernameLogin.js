@@ -2,27 +2,50 @@ import React from "react";
 import { StyleSheet, Text, View, AsyncStorage, TextInput } from "react-native";
 
 import { YellowButton, BackArrow } from "../../components";
-import { loginWithUsername, userNameAvailability } from "../../../api";
+import { loginWithUsername, userNameAvailability } from "../../api";
 
 const Style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2D2D2D"
+    backgroundColor: "#2D2D2D",
+    padding: 20,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignContent: "center",
+    alignItems: "center",
+    textAlign: "center"
   },
   pageContainer: {},
-  headerText: {},
-  headerSubtext: {},
-  errorText: {},
-  inputContainer: {},
-  input: {},
-  buttonContainer: {}
+  headerText: {
+    fontFamily: "Gotham",
+    fontSize: 16,
+    lineHeight: 19,
+    color: "#FFFFFF"
+  },
+  headerSubtext: {
+    fontSize: 12,
+    color: "#BEBEBE"
+  },
+  errorText: {
+    fontSize: 12,
+    color: "#BD1E1E"
+  },
+  inputContainer: {
+    width: "100%",
+    height: 40,
+    margin: 4
+  },
+  input: {
+    width: "100%",
+    height: "100%",
+    fontFamily: "Gotham",
+    fontSize: 28,
+    lineHeight: 35,
+    color: "#FFFFFF"
+  }
 });
 
 class UsernameLogin extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   state = {
     currentPage: 1,
     username: "",
@@ -30,7 +53,8 @@ class UsernameLogin extends React.Component {
     usernameError: null,
     password: "",
     passwordValid: false,
-    passwordError: null
+    passwordError: null,
+    isDisabled: true
   };
 
   next = async () => {
@@ -64,10 +88,10 @@ class UsernameLogin extends React.Component {
   };
 
   prev = async () => {
-    const { history } = this.props;
+    const { navigation } = this.props;
     const { currentPage } = this.state;
     if (currentPage === 1) {
-      history.push("/");
+      navigation.navigate("Main");
     } else {
       await this.setState({ currentPage: currentPage - 1 });
     }
@@ -86,17 +110,16 @@ class UsernameLogin extends React.Component {
     }
   };
 
-  handleUsernameChange = async e => {
+  handleUsernameChange = async name => {
     const { isDisabled } = this.state;
-    const username = e.target.value.toLowerCase();
+    const username = name.toLowerCase();
     await this.setState({ username });
     if (!isDisabled) await this.validateUsername(username);
     if (isDisabled) this.checkButtonStatus();
   };
 
-  handlePasswordChange = async e => {
+  handlePasswordChange = async password => {
     const { isDisabled } = this.state;
-    const password = e.target.value;
     await this.setState({ password });
     if (!isDisabled) await this.validatePassword(password);
     if (isDisabled) this.checkButtonStatus();
@@ -124,15 +147,20 @@ class UsernameLogin extends React.Component {
   };
 
   login = async () => {
-    const { navigation, updateUserCoins } = this.props;
+    const { navigation } = this.props;
     const { username, password } = this.state;
-    const resp = await loginWithUsername({ username, password });
-    const { session } = resp.data;
+    try {
+      const resp = await loginWithUsername({ username, password });
+      console.log(resp);
 
-    updateUserCoins(resp.data.user.coins);
-    await AsyncStorage.setItem("session", session);
-    console.log(session);
-    await navigation.navigate("Home");
+      const { session } = resp.data;
+
+      console.log(session);
+      await AsyncStorage.setItem("session", session);
+      await navigation.navigate("Home");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
@@ -184,22 +212,27 @@ const FirstPage = ({
       <View style={Style.inputContainer}>
         <TextInput
           style={Style.input}
-          placeholder="USERNAME"
+          selectionColor="#C2B48D"
+          placeholderTextColor="#BFBFBF"
+          placeholder="USERNAME "
           value={username}
-          onChange={updateUsername}
+          onChangeText={updateUsername}
         />
-        {usernameError && <Text style={Style.errorText}>{usernameError}</Text>}
+        {usernameError && (
+          <Text style={[Style.headerText, Style.errorText]}>
+            {usernameError}
+          </Text>
+        )}
       </View>
     </View>
-    <View style={Style.buttonContainer}>
-      <YellowButton
-        width={256}
-        height={50}
-        text="NEXT"
-        disabled={isDisabled}
-        onClick={next}
-      />
-    </View>
+    <YellowButton
+      width={256}
+      height={50}
+      fontSize={16}
+      text="NEXT"
+      disabled={isDisabled}
+      onPress={next}
+    />
   </React.Fragment>
 );
 const SecondPage = ({
@@ -212,29 +245,35 @@ const SecondPage = ({
   <React.Fragment>
     <View style={Style.pageContainer}>
       <Text style={Style.headerText}>What's your password?</Text>
-      <Text style={Style.headerSubtext}>
+      <Text style={[Style.headerText, Style.headerSubtext]}>
         Your password should be at least 6 characters.
       </Text>
       <View style={Style.inputContainer}>
         <TextInput
           style={Style.input}
-          placeholder="PASSWORD"
-          type="password"
+          autoFocus
+          selectionColor="#C2B48D"
+          placeholder="PASSWORD "
+          placeholderTextColor="#BFBFBF"
+          secureTextEntry
           value={password}
-          onChange={updatePassword}
+          onChangeText={updatePassword}
         />
-        {passwordError && <Text style={Style.errorText}>{passwordError}</Text>}
+        {passwordError && (
+          <Text style={[Style.headerText, Style.errorText]}>
+            {passwordError}
+          </Text>
+        )}
       </View>
     </View>
-    <View style={Style.buttonContainer}>
-      <YellowButton
-        width={256}
-        height={50}
-        text="NEXT"
-        disabled={isDisabled}
-        onClick={next}
-      />
-    </View>
+    <YellowButton
+      width={256}
+      height={50}
+      fontSize={16}
+      text="NEXT"
+      disabled={isDisabled}
+      onPress={next}
+    />
   </React.Fragment>
 );
 

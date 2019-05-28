@@ -3,12 +3,16 @@ import { Image, TouchableWithoutFeedback, StyleSheet } from "react-native";
 
 const Style = StyleSheet.create({
   icon: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    margin: 8,
     width: 20,
     height: 20
   }
 });
 
-const TabBarIcon = ({ onPress }) => (
+const BackArrow = ({ onPress }) => (
   <TouchableWithoutFeedback onPress={() => onPress()}>
     <Image
       source={require("../../assets/images/BackArrow/backArrow.png")}
@@ -17,4 +21,4 @@ const TabBarIcon = ({ onPress }) => (
   </TouchableWithoutFeedback>
 );
 
-export default TabBarIcon;
+export default BackArrow;

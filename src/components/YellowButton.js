@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
 const Style = StyleSheet.create({
   container: {
+    width: "100%",
+    height: "100%",
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
@@ -36,6 +38,7 @@ const YellowButton = ({
   width,
   height,
   margin,
+  fontSize,
   disabled = false
 }) => (
   <TouchableOpacity onPress={disabled ? () => {} : () => onPress()}>
@@ -60,7 +63,15 @@ const YellowButton = ({
             ]
       }
     >
-      <Text style={disabled ? Style.disabledText : Style.text}>{text}</Text>
+      <Text
+        style={
+          disabled
+            ? [Style.disabledText, { fontSize: fontSize || 12 }]
+            : [Style.text, { fontSize: fontSize || 12 }]
+        }
+      >
+        {text}
+      </Text>
     </View>
   </TouchableOpacity>
 );

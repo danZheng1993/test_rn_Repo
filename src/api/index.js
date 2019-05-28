@@ -84,7 +84,7 @@ export function userRegistration(values) {
     headers: {
       ...defaultHeaders.headers,
       "x-app-date": getNewDate(),
-      "x-app-device": "huaweip8"
+      "x-app-device": device
     },
     url: `/auth/register`,
     data
@@ -144,7 +144,7 @@ export function loginWithUsername(Obj) {
       ...defaultHeaders.headers,
       "x-app-date": getNewDate(),
       "Content-Type": "application/json",
-      "x-app-device": "huaweip8"
+      "x-app-device": device
     },
     url: `/auth/login`,
     data: JSON.stringify(Obj)
@@ -159,7 +159,7 @@ export function loginWithEmail(Obj) {
       ...defaultHeaders.headers,
       "x-app-date": getNewDate(),
       "Content-Type": "application/json",
-      "x-app-device": "huaweip8"
+      "x-app-device": device
     },
     url: `/auth/login`,
     data: JSON.stringify(Obj)
@@ -174,7 +174,7 @@ export function loginWithPhone(Obj) {
       ...defaultHeaders.headers,
       "x-app-date": getNewDate(),
       "Content-Type": "application/json",
-      "x-app-device": "huaweip8"
+      "x-app-device": device
     },
     url: `/auth/verify/login`,
     data: JSON.stringify(Obj)

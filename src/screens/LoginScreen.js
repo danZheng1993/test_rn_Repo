@@ -11,6 +11,7 @@ class LoginScreen extends React.Component {
 
   render() {
     const {
+      navigation,
       navigation: {
         state: {
           params: { type }
@@ -19,13 +20,13 @@ class LoginScreen extends React.Component {
     } = this.props;
     switch (type) {
       case "phone":
-        return <PhoneLogin {...this.props} />;
+        return <PhoneLogin navigation={navigation} />;
       case "email":
-        return <EmailLogin {...this.props} />;
+        return <EmailLogin navigation={navigation} />;
       case "username":
-        return <UsernameLogin {...this.props} />;
+        return <UsernameLogin navigation={navigation} />;
       default:
-        return <UsernameLogin {...this.props} />;
+        return <UsernameLogin navigation={navigation} />;
     }
   }
 }
