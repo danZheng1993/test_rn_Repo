@@ -1,6 +1,6 @@
 import React from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
-import { AppLoading, Asset, Font, Icon, Constants, Amplitude } from "expo";
+import { AppLoading, Asset, Font, Constants, Amplitude } from "expo";
 import Sentry from "sentry-expo";
 import { AppNavigator } from "./src/navigation";
 
