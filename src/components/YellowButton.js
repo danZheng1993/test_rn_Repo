@@ -14,6 +14,19 @@ const Style = StyleSheet.create({
     fontSize: 12,
     lineHeight: 12,
     color: "#000000"
+  },
+  disabledContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    backgroundColor: "#BFBFBF"
+  },
+  disabledText: {
+    fontFamily: "CircularProBold",
+    fontSize: 12,
+    lineHeight: 12,
+    color: "#484848"
   }
 });
 
@@ -22,16 +35,32 @@ const YellowButton = ({
   text = "GET STARTED",
   width,
   height,
-  margin
+  margin,
+  disabled = false
 }) => (
-  <TouchableOpacity onPress={() => onPress()}>
+  <TouchableOpacity onPress={disabled ? () => {} : () => onPress()}>
     <View
-      style={[
-        Style.container,
-        { width: width || 110, height: height || 36, margin: margin || 8 }
-      ]}
+      style={
+        disabled
+          ? [
+              Style.disabledContainer,
+              {
+                width: width || 110,
+                height: height || 36,
+                margin: margin || 8
+              }
+            ]
+          : [
+              Style.container,
+              {
+                width: width || 110,
+                height: height || 36,
+                margin: margin || 8
+              }
+            ]
+      }
     >
-      <Text style={Style.text}>{text}</Text>
+      <Text style={disabled ? Style.disabledText : Style.text}>{text}</Text>
     </View>
   </TouchableOpacity>
 );
