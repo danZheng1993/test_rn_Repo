@@ -216,15 +216,16 @@ const FirstPage = ({
     <Text style={Style.headerText}>What's your username?</Text>
     <TextInput
       style={Style.input}
+      autoFocus
       selectionColor="#C2B48D"
       placeholderTextColor="#BFBFBF"
-      placeholder="USERNAME "
+      placeholder="USERNAME"
       value={username}
       onChangeText={updateUsername}
       autoCorrect={false}
       returnKeyType="next"
       onSubmitEditing={() => {
-        this.passwordInput.focus();
+        next();
       }}
     />
     {usernameError && (
@@ -254,7 +255,6 @@ const SecondPage = ({
     </Text>
     <TextInput
       style={Style.input}
-      autoFocus
       selectionColor="#C2B48D"
       placeholder="PASSWORD "
       placeholderTextColor="#BFBFBF"
