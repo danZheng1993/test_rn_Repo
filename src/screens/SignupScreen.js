@@ -22,6 +22,8 @@ import {
   setDefaultsForApi
 } from "../api";
 
+const MINIMUM_AGE = 17;
+
 const Style = StyleSheet.create({
   container: {
     flex: 1,
@@ -66,6 +68,7 @@ const Style = StyleSheet.create({
     color: "#BD1E1E"
   },
   skipText: {},
+  legalText: {},
   input: {
     height: 40,
     marginTop: 12,
@@ -160,9 +163,9 @@ class SignupScreen extends React.Component {
     } else if (currentPage === 1) {
       if (dobValid) {
         const today = new Date();
-        if (today.getFullYear() - Number(dob.year) < 13) {
+        if (today.getFullYear() - Number(dob.year) < MINIMUM_AGE) {
           await this.setState({
-            dobError: "You must be at least 13 years or older to use Zion."
+            dobError: `You must be at least ${MINIMUM_AGE} years or older to use Zion.`
           });
         } else {
           await this.setState({
@@ -856,6 +859,10 @@ const DOBPage = ({
       {dobError && (
         <Text style={[Style.headerText, Style.errorText]}>{dobError}</Text>
       )}
+      <Text style={[Style.headerText, Style.legalText]}>
+        By tapping the 'Next' you are confirming that you are at least 17 years
+        old & agree to our Terms of Service and Privacy Policy
+      </Text>
       <YellowButton
         width={256}
         height={50}
@@ -1077,9 +1084,7 @@ const FifthPage = ({
       <Text style={[Style.headerText, Style.errorText]}>{codeError}</Text>
     )}
     <TouchableOpacity onPress={resendCode}>
-      <SubLabelLink style={Style.headerSubtext}>
-        Didn't get it? Send new code
-      </SubLabelLink>
+      <Text style={Style.headerSubtext}>Didn't get it? Send new code</Text>
     </TouchableOpacity>
     <YellowButton
       width={256}
@@ -1095,7 +1100,7 @@ const FifthPage = ({
 const SixthPage = ({ email, updateEmail, emailError, isDisabled, next }) => (
   <View style={Style.pageContainer}>
     <Text style={Style.headerText}>What's your email?</Text>
-    <Input
+    <TextInput
       style={Style.input}
       autoFocus
       selectionColor="#C2B48D"
