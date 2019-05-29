@@ -806,7 +806,7 @@ const DOBPage = ({
           style={Style.picker}
         >
           {months.map(m => (
-            <Picker.Item value={m.toString()} label={m} />
+            <Picker.Item value={m.toString()} label={m.toString()} />
           ))}
         </Picker>
         <Picker
@@ -815,7 +815,7 @@ const DOBPage = ({
           style={Style.picker}
         >
           {dates.map(d => (
-            <Picker.Item value={d.toString()} label={d} />
+            <Picker.Item value={d.toString()} label={d.toString()} />
           ))}
         </Picker>
         <Picker
@@ -824,7 +824,7 @@ const DOBPage = ({
           style={Style.picker}
         >
           {years.reverse().map(y => (
-            <Picker.Item value={y.toString()} label={y} />
+            <Picker.Item value={y.toString()} label={y.toString()} />
           ))}
         </Picker>
       </View>
