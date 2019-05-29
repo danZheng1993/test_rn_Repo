@@ -44,7 +44,12 @@ const Style = StyleSheet.create({
     alignItems: "center",
     textAlign: "center"
   },
-  skipContainer: {},
+  skipContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    margin: 8
+  },
   pickerContainer: {
     width: "100%",
     flexDirection: "row",
@@ -67,8 +72,14 @@ const Style = StyleSheet.create({
     fontSize: 12,
     color: "#BD1E1E"
   },
-  skipText: {},
-  legalText: {},
+  skipText: {
+    color: "#BDBDBD"
+  },
+  legalText: {
+    fontFamily: "GothamBook",
+    fontSize: 12,
+    color: "#FFFFFF"
+  },
   input: {
     height: 40,
     marginTop: 12,
@@ -80,7 +91,7 @@ const Style = StyleSheet.create({
   },
   picker: {
     height: 50,
-    width: 100,
+    width: 75,
     backgroundColor: "#747474"
   },
   pickerItem: {
@@ -698,12 +709,12 @@ class SignupScreen extends React.Component {
                        ) */}
         <BackArrow onPress={() => this.prev()} />
         {currentPage === 7 && isMobileSignup && (
-          <View
+          <TouchableOpacity
             style={Style.skipContainer}
             onClick={() => this.createAccount()}
           >
             <Text style={Style.skipText}>Skip</Text>
-          </View>
+          </TouchableOpacity>
         )}
         <View style={Style.container}>
           {currentPage === 1 ? (

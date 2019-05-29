@@ -9,8 +9,7 @@ const Style = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     borderWidth: 1,
-    borderColor: "#b3b3b3",
-    borderRadius: "50%"
+    borderColor: "#b3b3b3"
   },
   text: {
     fontFamily: "CircularProBook",
@@ -36,7 +35,8 @@ const RoundButton = ({
         {
           width: width || 110,
           height: height || 36,
-          margin: margin || 8
+          margin: margin || 8,
+          borderRadius: width / 4 || 110 / 4
         }
       ]}
     >
