@@ -2,7 +2,11 @@ import React from "react";
 import { StyleSheet, Text, View, AsyncStorage, TextInput } from "react-native";
 
 import { YellowButton, BackArrow } from "../../components";
-import { loginWithUsername, userNameAvailability } from "../../api";
+import {
+  loginWithUsername,
+  userNameAvailability,
+  setDefaultsForApi
+} from "../../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -15,7 +19,15 @@ const Style = StyleSheet.create({
     alignItems: "center",
     textAlign: "center"
   },
-  pageContainer: {},
+  pageContainer: {
+    height: "60%",
+    width: "100%",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignContent: "center",
+    alignItems: "center",
+    textAlign: "center"
+  },
   headerText: {
     fontFamily: "Gotham",
     fontSize: 16,
@@ -30,18 +42,14 @@ const Style = StyleSheet.create({
     fontSize: 12,
     color: "#BD1E1E"
   },
-  inputContainer: {
-    width: "100%",
-    height: 40,
-    margin: 4
-  },
   input: {
-    width: "100%",
-    height: "100%",
+    height: 40,
+    marginTop: 12,
     fontFamily: "Gotham",
     fontSize: 28,
     lineHeight: 35,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
+    textAlign: "center"
   }
 });
 
@@ -151,12 +159,10 @@ class UsernameLogin extends React.Component {
     const { username, password } = this.state;
     try {
       const resp = await loginWithUsername({ username, password });
-      console.log(resp);
-
       const { session } = resp.data;
 
-      console.log(session);
-      await AsyncStorage.setItem("session", session);
+      await AsyncStorage.setItem("session", JSON.stringify(session));
+      await setDefaultsForApi(JSON.stringify(session));
       await navigation.navigate("Home");
     } catch (error) {
       console.log(error);
@@ -206,34 +212,34 @@ const FirstPage = ({
   isDisabled,
   next
 }) => (
-  <React.Fragment>
-    <View style={Style.pageContainer}>
-      <Text style={Style.headerText}>What's your username?</Text>
-      <View style={Style.inputContainer}>
-        <TextInput
-          style={Style.input}
-          selectionColor="#C2B48D"
-          placeholderTextColor="#BFBFBF"
-          placeholder="USERNAME "
-          value={username}
-          onChangeText={updateUsername}
-        />
-        {usernameError && (
-          <Text style={[Style.headerText, Style.errorText]}>
-            {usernameError}
-          </Text>
-        )}
-      </View>
-    </View>
+  <View style={Style.pageContainer}>
+    <Text style={Style.headerText}>What's your username?</Text>
+    <TextInput
+      style={Style.input}
+      autoFocus
+      selectionColor="#C2B48D"
+      placeholderTextColor="#BFBFBF"
+      placeholder="USERNAME"
+      value={username}
+      onChangeText={updateUsername}
+      autoCorrect={false}
+      returnKeyType="next"
+      onSubmitEditing={() => {
+        next();
+      }}
+    />
+    {usernameError && (
+      <Text style={[Style.headerText, Style.errorText]}>{usernameError}</Text>
+    )}
     <YellowButton
       width={256}
       height={50}
-      fontSize={16}
+      fontSize={18}
       text="NEXT"
       disabled={isDisabled}
       onPress={next}
     />
-  </React.Fragment>
+  </View>
 );
 const SecondPage = ({
   password,
@@ -242,39 +248,38 @@ const SecondPage = ({
   isDisabled,
   next
 }) => (
-  <React.Fragment>
-    <View style={Style.pageContainer}>
-      <Text style={Style.headerText}>What's your password?</Text>
-      <Text style={[Style.headerText, Style.headerSubtext]}>
-        Your password should be at least 6 characters.
-      </Text>
-      <View style={Style.inputContainer}>
-        <TextInput
-          style={Style.input}
-          autoFocus
-          selectionColor="#C2B48D"
-          placeholder="PASSWORD "
-          placeholderTextColor="#BFBFBF"
-          secureTextEntry
-          value={password}
-          onChangeText={updatePassword}
-        />
-        {passwordError && (
-          <Text style={[Style.headerText, Style.errorText]}>
-            {passwordError}
-          </Text>
-        )}
-      </View>
-    </View>
+  <View style={Style.pageContainer}>
+    <Text style={Style.headerText}>What's your password?</Text>
+    <Text style={[Style.headerText, Style.headerSubtext]}>
+      Your password should be at least 6 characters.
+    </Text>
+    <TextInput
+      style={Style.input}
+      selectionColor="#C2B48D"
+      autoFocus
+      placeholder="PASSWORD"
+      placeholderTextColor="#BFBFBF"
+      secureTextEntry
+      value={password}
+      onChangeText={updatePassword}
+      autoCorrect={false}
+      ref={input => {
+        this.passwordInput = input;
+      }}
+      onSubmitEditing={next}
+    />
+    {passwordError && (
+      <Text style={[Style.headerText, Style.errorText]}>{passwordError}</Text>
+    )}
     <YellowButton
       width={256}
       height={50}
-      fontSize={16}
+      fontSize={18}
       text="NEXT"
       disabled={isDisabled}
       onPress={next}
     />
-  </React.Fragment>
+  </View>
 );
 
 export default UsernameLogin;

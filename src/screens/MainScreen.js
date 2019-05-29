@@ -5,9 +5,12 @@ import {
   View,
   Image,
   Linking,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  AsyncStorage
 } from "react-native";
+
 import { YellowButton } from "../components";
+import { setDefaultsForApi } from "../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -72,6 +75,17 @@ export default class MainScreen extends React.Component {
   };
 
   state = { activeTab: "signup" };
+
+  componentDidMount = async () => {
+    const { navigation } = this.props;
+
+    // TODO: Check if valid
+    const session = await AsyncStorage.getItem("session");
+    if (session !== null) {
+      await setDefaultsForApi(JSON.stringify(session));
+      await navigation.navigate("Home");
+    }
+  };
 
   goToLogin = type => {
     const { navigation } = this.props;

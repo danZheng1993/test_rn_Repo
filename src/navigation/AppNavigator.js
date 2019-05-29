@@ -6,7 +6,7 @@ import TabNavigator from "./TabNavigator";
 
 const AppNavigator = createAppContainer(
   createSwitchNavigator({
-    Main: MainNavigator,
+    Init: MainNavigator,
     Home: TabNavigator
   })
 );
