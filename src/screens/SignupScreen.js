@@ -43,7 +43,14 @@ const Style = StyleSheet.create({
     textAlign: "center"
   },
   skipContainer: {},
-  selectContainer: {},
+  pickerContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignContent: "center",
+    alignItems: "center",
+    textAlign: "center"
+  },
   headerText: {
     fontFamily: "Gotham",
     fontSize: 16,
@@ -70,7 +77,10 @@ const Style = StyleSheet.create({
   },
   picker: {
     height: 50,
-    backgroundColor: "#747474",
+    width: 100,
+    backgroundColor: "#747474"
+  },
+  pickerItem: {
     fontFamily: "CircularPro",
     fontSize: 28,
     lineHeight: 19,
@@ -799,32 +809,47 @@ const DOBPage = ({
   return (
     <View style={Style.pageContainer}>
       <Text style={Style.headerText}>When is your birthday?</Text>
-      <View style={Style.selectContainer}>
+      <View style={Style.pickerContainer}>
         <Picker
           selectedValue={dob.month}
           onValueChange={updateMonth}
           style={Style.picker}
+          itemStyle={Style.pickerItem}
         >
           {months.map(m => (
-            <Picker.Item value={m.toString()} label={m.toString()} />
+            <Picker.Item
+              value={m.toString()}
+              label={m.toString()}
+              key={m.toString()}
+            />
           ))}
         </Picker>
         <Picker
           selectedValue={dob.date}
           onValueChange={updateDate}
           style={Style.picker}
+          itemStyle={Style.pickerItem}
         >
           {dates.map(d => (
-            <Picker.Item value={d.toString()} label={d.toString()} />
+            <Picker.Item
+              value={d.toString()}
+              label={d.toString()}
+              key={d.toString()}
+            />
           ))}
         </Picker>
         <Picker
           selectedValue={dob.year}
           onValueChange={updateYear}
           style={Style.picker}
+          itemStyle={Style.pickerItem}
         >
           {years.reverse().map(y => (
-            <Picker.Item value={y.toString()} label={y.toString()} />
+            <Picker.Item
+              value={y.toString()}
+              label={y.toString()}
+              key={y.toString()}
+            />
           ))}
         </Picker>
       </View>
