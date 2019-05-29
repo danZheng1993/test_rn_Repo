@@ -257,7 +257,7 @@ const SecondPage = ({
       style={Style.input}
       selectionColor="#C2B48D"
       autoFocus
-      placeholder="PASSWORD "
+      placeholder="PASSWORD"
       placeholderTextColor="#BFBFBF"
       secureTextEntry
       value={password}
