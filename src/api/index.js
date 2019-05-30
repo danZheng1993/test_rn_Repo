@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-nested-ternary */
 import axios from "axios";
+import { AsyncStorage } from "react-native";
 
 const API = "https://devapi.joinsaga.com/api/v1";
 
@@ -31,18 +32,16 @@ const defaultHeaders = {
   }
 };
 
-export const setDefaultsForApi = async session => {
+const getAuthHeaders = async () => {
+  const session = await AsyncStorage.getItem("session");
   if (session !== null) {
-    cookies = JSON.parse(session);
-    axios.defaults.headers.common.Authorization = `Bearer ${
-      cookies.access_token
-    }`;
-  } else {
-    cookies = { session_id: null, access_token: null };
-    axios.defaults.headers.common.Authorization = `Bearer ${
-      cookies.access_token
-    }`;
+    const { access_token, session_id } = JSON.parse(session);
+    return {
+      Authorization: `Bearer ${access_token}`,
+      "x-app-session": session_id
+    };
   }
+  return { session_id: null, access_token: null };
 };
 
 const getNewDate = () => {
@@ -74,8 +73,9 @@ export function getRelatedArtists(id) {
   });
 }
 
-export const artistsFollow = Obj =>
-  axios({
+export const artistsFollow = async Obj => {
+  const authHeaders = await getAuthHeaders();
+  return axios({
     ...defaultHeaders,
     method: "post",
     headers: {
@@ -83,14 +83,15 @@ export const artistsFollow = Obj =>
       "x-app-date": getNewDate(),
       "Content-Type": "application/json",
       "x-app-device": device,
-      "x-app-session": `${cookies.session_id}`
+      ...authHeaders
     },
     url: `/music/artists`,
     data: JSON.stringify(Obj)
   });
+};
 
-export function getMe(session) {
-  const { access_token, session_id } = JSON.parse(session);
+export const getMe = async () => {
+  const authHeaders = await getAuthHeaders();
   return axios({
     ...defaultHeaders,
     method: "get",
@@ -99,13 +100,12 @@ export function getMe(session) {
       "x-app-date": getNewDate(),
       "Content-Type": "application/json",
       "x-app-device": device,
-      Authorization: `Bearer ${access_token}`,
-      "x-app-session": session_id
+      ...authHeaders
     },
     url: `/users/me`,
     data: ""
   });
-}
+};
 
 export function updateMe(Obj) {
   return axios({

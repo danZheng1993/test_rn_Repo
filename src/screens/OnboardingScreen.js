@@ -327,7 +327,7 @@ const SecondPage = ({
     <FlatList
       data={artists}
       numColumns={2}
-      keyExtractor={(item, index) => `${item.id}-${index}`}
+      keyExtractor={item => `${item.id}`}
       renderItem={({ item }) => (
         <ArtistCircle artist={item} onClick={selectArtist} />
       )}

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import { YellowButton, BackArrow } from "../components";
-import { getMe, setDefaultsForApi } from "../api";
+import { getMe } from "../api";
 
 const styles = StyleSheet.create({
   container: {
@@ -25,7 +25,6 @@ export default class HomeScreen extends React.Component {
   logout = async () => {
     const { navigation } = this.props;
     await AsyncStorage.removeItem("session");
-    await setDefaultsForApi(null);
     await navigation.navigate("Main");
   };
 

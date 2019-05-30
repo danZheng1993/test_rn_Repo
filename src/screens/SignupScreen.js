@@ -18,8 +18,7 @@ import {
   sendVerificationCode,
   resendVerificationCode,
   verifyCode,
-  loginWithUsername,
-  setDefaultsForApi
+  loginWithUsername
 } from "../api";
 
 const MINIMUM_AGE = 17;
@@ -589,7 +588,6 @@ class SignupScreen extends React.Component {
       const { session } = resp.data;
 
       await AsyncStorage.setItem("session", JSON.stringify(session));
-      await setDefaultsForApi(JSON.stringify(session));
       await navigation.navigate("Onboarding");
     } catch (e) {
       console.log(e);

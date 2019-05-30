@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 import { YellowButton, LoadingIndicator } from "../components";
-import { setDefaultsForApi, getMe } from "../api";
+import { getMe } from "../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -83,7 +83,6 @@ export default class MainScreen extends React.Component {
     const session = await AsyncStorage.getItem("session");
     if (session !== null) {
       console.log(session);
-      await setDefaultsForApi(JSON.stringify(session));
 
       const resp = await getMe(session);
       console.log(`result: ${resp.data.user.onboarding_done}`);

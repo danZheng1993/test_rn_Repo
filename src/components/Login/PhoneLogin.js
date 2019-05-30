@@ -9,11 +9,7 @@ import {
 } from "react-native";
 
 import { YellowButton, BackArrow } from "../../components";
-import {
-  loginWithPhone,
-  resendVerificationCode,
-  setDefaultsForApi
-} from "../../api";
+import { loginWithPhone, resendVerificationCode } from "../../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -176,7 +172,6 @@ class PhoneLogin extends React.Component {
       const { session } = resp.data;
 
       await AsyncStorage.setItem("session", JSON.stringify(session));
-      await setDefaultsForApi(JSON.stringify(session));
       await navigation.navigate("Home");
     } catch (error) {
       console.log(error);
