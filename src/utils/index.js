@@ -9,3 +9,5 @@ export { default as GetCameraRollImage } from "./CameraRoll";
 
 export { default as GetContactsPermissions } from "./Contacts";
 export { default as GetContacts } from "./Contacts";
+
+export { default as GetNotificationPermissions } from "./Notifications";
