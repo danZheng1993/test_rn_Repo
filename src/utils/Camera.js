@@ -1,13 +1,13 @@
 import { Alert } from "react-native";
 import { Permissions, ImagePicker } from "expo";
-import { GetCameraRollPermissions } from "./";
+import { GetCameraRollPermissions } from "./CameraRoll";
 
-const GetCameraPermissions = async () => {
+export const GetCameraPermissions = async () => {
   const { status } = await Permissions.askAsync(Permissions.CAMERA);
   return status === "granted";
 };
 
-const GetCameraImage = async () => {
+export const GetCameraImage = async () => {
   const options = {
     quality: 0.5,
     base64: true,
@@ -30,5 +30,3 @@ const GetCameraImage = async () => {
     return null;
   }
 };
-
-export { GetCameraPermissions, GetCameraImage };

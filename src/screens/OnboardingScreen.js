@@ -99,6 +99,7 @@ class OnboardingScreen extends React.Component {
       return;
     }
     const resp = await getOnboardingArtists(1, 10);
+    console.log(resp.data);
     await this.setState({ artists: resp.data });
   };
 
@@ -186,13 +187,15 @@ class OnboardingScreen extends React.Component {
   };
 
   openCamera = async () => {
-    // TODO: Implement
-    // await handlePhotoChange()
+    const photo = await GetCameraImage();
+    console.log(photo);
+    await this.handlePhotoChange(photo);
   };
 
   openCameraRoll = async () => {
-    // TODO: Implement
-    // await handlePhotoChange()
+    const photo = await GetCameraRollImage();
+    console.log(photo);
+    await this.handlePhotoChange(photo);
   };
 
   handlePhotoChange = async photo => {
@@ -208,7 +211,7 @@ class OnboardingScreen extends React.Component {
       artistsError,
       isDisabled
     } = this.state;
-    if (isDisabled) this.checkButtonStatus();
+    if (isDisabled && currentPage !== 1) this.checkButtonStatus();
     return (
       <React.Fragment>
         {currentPage === 1 && (
