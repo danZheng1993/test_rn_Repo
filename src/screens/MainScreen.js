@@ -114,7 +114,7 @@ export default class MainScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const { activeTab, loading } = this.state;
-    if (loading) <LoadingIndicator />;
+    if (loading) return <LoadingIndicator />;
     return (
       <View style={Style.container}>
         <View style={Style.header}>

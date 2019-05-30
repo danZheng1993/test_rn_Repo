@@ -9,25 +9,33 @@ import {
 
 const Style = StyleSheet.create({
   container: {
-    flex: 1,
+    position: "relative",
     flexDirection: "column",
     justifyContent: "space-evenly",
     alignContent: "center",
     alignItems: "center",
-    textAlign: "center"
+    textAlign: "center",
+    margin: 8
   },
   artistContainer: {
     width: 100,
-    height: 100
+    height: 100,
+    borderRadius: 50
   },
   selectedArtistContainer: {
+    position: "absolute",
+    top: -5,
+    left: -5,
+    width: 110,
+    height: 110,
+    borderRadius: 55,
     borderWidth: 10,
     borderColor: "#C2B48D"
   },
   img: {
-    width: 75,
-    height: 75,
-    borderRadius: 40
+    width: 100,
+    height: 100,
+    borderRadius: 50
   },
   name: {
     fontFamily: "GothamBook",
@@ -37,7 +45,7 @@ const Style = StyleSheet.create({
   }
 });
 
-class ArtistCircle extends React.Component {
+class ArtistCircle extends React.PureComponent {
   state = { selected: false };
 
   render() {
@@ -52,25 +60,17 @@ class ArtistCircle extends React.Component {
         }}
       >
         <View style={Style.container}>
-          {selected ? (
-            <View
-              style={[Style.artistContainer, Style.selectedArtistContainer]}
-            >
-              <Image
-                style={Style.img}
-                source={{ uri } || null}
-                alt={artist.name}
-              />
-            </View>
-          ) : (
-            <View style={Style.artistContainer}>
-              <Image
-                style={Style.img}
-                source={{ uri } || null}
-                alt={artist.name}
-              />
-            </View>
-          )}
+          <View style={Style.artistContainer}>
+            {selected && <View style={Style.selectedArtistContainer} />}
+            <Image
+              style={Style.img}
+              source={
+                { uri } ||
+                require("../../assets/images/placeholder/placeholder.png")
+              }
+              alt={artist.name}
+            />
+          </View>
           <Text style={Style.name}>{artist.name}</Text>
         </View>
       </TouchableWithoutFeedback>

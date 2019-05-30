@@ -1,6 +1,13 @@
 /* eslint-disable no-nested-ternary */
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  FlatList
+} from "react-native";
 
 import { YellowButton, ArtistCircle } from "../components";
 import {
@@ -50,14 +57,17 @@ const Style = StyleSheet.create({
     padding: 8
   },
   gridContainer: {
+    flex: 1,
     height: "50%",
     width: "100%",
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     flexWrap: "wrap",
     alignContent: "center",
     alignItems: "center",
-    textAlign: "center"
+    textAlign: "center",
+    marginTop: 16,
+    marginBottom: 16
   },
   headerText: {
     fontFamily: "Gotham",
@@ -314,14 +324,17 @@ const SecondPage = ({
       These selections will help customize Zion just for you. Select at least 3
       artists.
     </Text>
+    <FlatList
+      data={artists}
+      numColumns={2}
+      keyExtractor={(item, index) => `${item.id}-${index}`}
+      renderItem={({ item }) => (
+        <ArtistCircle artist={item} onClick={selectArtist} />
+      )}
+    />
     {artistsError && (
       <Text style={[Style.headerText, Style.errorText]}>{artistsError}</Text>
     )}
-    <View style={Style.gridContainer}>
-      {artists.map(a => (
-        <ArtistCircle artist={a} key={a.id} onClick={selectArtist} />
-      ))}
-    </View>
     <YellowButton
       width={256}
       height={50}
