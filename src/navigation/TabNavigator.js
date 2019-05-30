@@ -5,21 +5,7 @@ import {
 } from "react-navigation";
 
 import { TabBarIcon } from "../components";
-import { HomeScreen, OnboardingScreen } from "../screens";
-
-const OnboardingStack = createStackNavigator({
-  OnboardingTemp: OnboardingScreen
-});
-
-OnboardingStack.navigationOptions = {
-  tabBarLabel: "Onboarding",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      icon={require("../../assets/images/navbar/home.png")}
-      focused={focused}
-    />
-  )
-};
+import { HomeScreen } from "../screens";
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen
@@ -93,7 +79,6 @@ SearchStack.navigationOptions = {
 
 export default createBottomTabNavigator(
   {
-    OnboardingStack,
     HomeStack,
     SongsStack,
     ChatStack,

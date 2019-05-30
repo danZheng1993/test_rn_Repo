@@ -22,15 +22,6 @@ export default class HomeScreen extends React.Component {
     header: null
   };
 
-  componentDidMount = async () => {
-    try {
-      const resp = await getMe();
-      console.log(resp.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   logout = async () => {
     const { navigation } = this.props;
     await AsyncStorage.removeItem("session");

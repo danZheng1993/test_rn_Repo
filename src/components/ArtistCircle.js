@@ -8,27 +8,32 @@ import {
 } from "react-native";
 
 const Style = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignContent: "center",
+    alignItems: "center",
+    textAlign: "center"
+  },
   artistContainer: {
-    width: 50,
-    height: 50,
-    margin: 20,
-    borderRadius: 25
+    width: 100,
+    height: 100
   },
   selectedArtistContainer: {
     borderWidth: 10,
     borderColor: "#C2B48D"
   },
   img: {
-    width: 50,
-    height: 50,
-    borderRadius: 25
+    width: 75,
+    height: 75,
+    borderRadius: 40
   },
   name: {
-    fontFamily: "Gotham",
-    fontSize: 20,
-    textAlign: "center",
+    fontFamily: "GothamBook",
+    fontSize: 14,
     color: "#ffffff",
-    marginTop: 20
+    marginTop: 8
   }
 });
 
@@ -46,7 +51,7 @@ class ArtistCircle extends React.Component {
           onClick(artist);
         }}
       >
-        <React.Fragment>
+        <View style={Style.container}>
           {selected ? (
             <View
               style={[Style.artistContainer, Style.selectedArtistContainer]}
@@ -67,7 +72,7 @@ class ArtistCircle extends React.Component {
             </View>
           )}
           <Text style={Style.name}>{artist.name}</Text>
-        </React.Fragment>
+        </View>
       </TouchableWithoutFeedback>
     );
   }

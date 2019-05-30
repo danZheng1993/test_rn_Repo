@@ -49,7 +49,16 @@ const Style = StyleSheet.create({
     margin: 8,
     padding: 8
   },
-  gridContainer: {},
+  gridContainer: {
+    height: "50%",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+    alignContent: "center",
+    alignItems: "center",
+    textAlign: "center"
+  },
   headerText: {
     fontFamily: "Gotham",
     fontSize: 16,
@@ -98,17 +107,8 @@ class OnboardingScreen extends React.Component {
   };
 
   componentDidMount = async () => {
-    const { navigation } = this.props;
-    let respMe;
-    try {
-      respMe = await getMe();
-      if (respMe.data.user.onboarding_done) {
-        navigation.navigate("Home");
-        return;
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    // TODO: Fix routing back every time
+
     try {
       const resp = await getOnboardingArtists(1, 10);
       console.log(resp.data);

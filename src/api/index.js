@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-nested-ternary */
 import axios from "axios";
 
@@ -21,6 +22,14 @@ const STRIPE_KEY =
 axios.defaults.baseURL = API;
 const device = "android";
 let cookies;
+const defaultHeaders = {
+  method: "get",
+  crossDomain: true,
+  headers: {
+    "x-app-platform": "postman",
+    "cache-control": "no-cache"
+  }
+};
 
 export const setDefaultsForApi = async session => {
   if (session !== null) {
@@ -33,15 +42,6 @@ export const setDefaultsForApi = async session => {
     axios.defaults.headers.common.Authorization = `Bearer ${
       cookies.access_token
     }`;
-  }
-};
-
-const defaultHeaders = {
-  method: "get",
-  crossDomain: true,
-  headers: {
-    "x-app-platform": "postman",
-    "cache-control": "no-cache"
   }
 };
 
@@ -89,7 +89,8 @@ export const artistsFollow = Obj =>
     data: JSON.stringify(Obj)
   });
 
-export function getMe() {
+export function getMe(session) {
+  const { access_token, session_id } = JSON.parse(session);
   return axios({
     ...defaultHeaders,
     method: "get",
@@ -98,7 +99,8 @@ export function getMe() {
       "x-app-date": getNewDate(),
       "Content-Type": "application/json",
       "x-app-device": device,
-      "x-app-session": `${cookies.session_id}`
+      Authorization: `Bearer ${access_token}`,
+      "x-app-session": session_id
     },
     url: `/users/me`,
     data: ""
