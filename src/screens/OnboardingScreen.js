@@ -99,16 +99,25 @@ class OnboardingScreen extends React.Component {
 
   componentDidMount = async () => {
     const { navigation } = this.props;
-    const respMe = await getMe();
-    if (respMe.data.user.onboarding_done) {
-      navigation.navigate("Home");
-      return;
+    let respMe;
+    try {
+      respMe = await getMe();
+      if (respMe.data.user.onboarding_done) {
+        navigation.navigate("Home");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
     }
-    const resp = await getOnboardingArtists(1, 10);
-    console.log(resp.data);
-    await this.setState({
-      artists: resp.data
-    });
+    try {
+      const resp = await getOnboardingArtists(1, 10);
+      console.log(resp.data);
+      await this.setState({
+        artists: resp.data
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   next = async () => {

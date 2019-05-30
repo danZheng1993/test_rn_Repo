@@ -24,7 +24,7 @@ const Style = StyleSheet.create({
     borderRadius: 25
   },
   name: {
-    fontFamily: " Gotham",
+    fontFamily: "Gotham",
     fontSize: 20,
     textAlign: "center",
     color: "#ffffff",
@@ -38,6 +38,7 @@ class ArtistCircle extends React.Component {
   render() {
     const { artist, onClick } = this.props;
     const { selected } = this.state;
+    const uri = artist.images[artist.images.length - 1].url;
     return (
       <TouchableWithoutFeedback
         onPress={() => {
@@ -45,24 +46,28 @@ class ArtistCircle extends React.Component {
           onClick(artist);
         }}
       >
-        {selected ? (
-          <View style={[Style.artistContainer, Style.selectedArtistContainer]}>
-            <Image
-              style={Style.img}
-              source={artist.images[artist.images.length - 1].url}
-              alt={artist.name}
-            />
-          </View>
-        ) : (
-          <View style={Style.artistContainer}>
-            <Image
-              style={Style.img}
-              source={artist.images[artist.images.length - 1].url}
-              alt={artist.name}
-            />
-          </View>
-        )}
-        <Text style={Style.name}>{artist.name}</Text>
+        <React.Fragment>
+          {selected ? (
+            <View
+              style={[Style.artistContainer, Style.selectedArtistContainer]}
+            >
+              <Image
+                style={Style.img}
+                source={{ uri } || null}
+                alt={artist.name}
+              />
+            </View>
+          ) : (
+            <View style={Style.artistContainer}>
+              <Image
+                style={Style.img}
+                source={{ uri } || null}
+                alt={artist.name}
+              />
+            </View>
+          )}
+          <Text style={Style.name}>{artist.name}</Text>
+        </React.Fragment>
       </TouchableWithoutFeedback>
     );
   }
