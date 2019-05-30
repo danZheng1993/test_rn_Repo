@@ -34,7 +34,7 @@ const Style = StyleSheet.create({
     textAlign: "center"
   },
   pageContainer: {
-    height: "60%",
+    height: "80%",
     width: "100%",
     flexDirection: "column",
     justifyContent: "space-evenly",
@@ -46,7 +46,8 @@ const Style = StyleSheet.create({
     position: "absolute",
     top: 0,
     right: 0,
-    margin: 8
+    margin: 8,
+    padding: 8
   },
   gridContainer: {},
   headerText: {
@@ -64,6 +65,7 @@ const Style = StyleSheet.create({
     color: "#BD1E1E"
   },
   skipText: {
+    fontSize: 14,
     color: "#BDBDBD"
   },
   logoText: {
@@ -73,7 +75,11 @@ const Style = StyleSheet.create({
     margin: 8
   },
   missionText: {},
-  image: {}
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 50
+  }
 });
 
 class OnboardingScreen extends React.Component {
@@ -100,7 +106,9 @@ class OnboardingScreen extends React.Component {
     }
     const resp = await getOnboardingArtists(1, 10);
     console.log(resp.data);
-    await this.setState({ artists: resp.data });
+    await this.setState({
+      artists: resp.data
+    });
   };
 
   next = async () => {
@@ -188,18 +196,23 @@ class OnboardingScreen extends React.Component {
 
   openCamera = async () => {
     const photo = await GetCameraImage();
-    console.log(photo);
-    await this.handlePhotoChange(photo);
+    if (!photo.cancelled) {
+      await this.handlePhotoChange(photo);
+    }
   };
 
   openCameraRoll = async () => {
     const photo = await GetCameraRollImage();
-    console.log(photo);
-    await this.handlePhotoChange(photo);
+    if (!photo.cancelled) {
+      await this.handlePhotoChange(photo);
+    }
   };
 
   handlePhotoChange = async photo => {
     await this.setState({ photo });
+    await updateMe({
+      photo: `data:image/png;base64,${photo.base64}`
+    });
   };
 
   render() {
@@ -213,7 +226,7 @@ class OnboardingScreen extends React.Component {
     } = this.state;
     if (isDisabled && currentPage !== 1) this.checkButtonStatus();
     return (
-      <React.Fragment>
+      <View style={Style.container}>
         {currentPage === 1 && (
           <TouchableOpacity
             onPress={this.skipProfilePicture}
@@ -222,27 +235,25 @@ class OnboardingScreen extends React.Component {
             <Text style={Style.skipText}>Next</Text>
           </TouchableOpacity>
         )}
-        <View style={Style.container}>
-          {currentPage === 1 ? (
-            <FirstPage
-              photo={photo}
-              photoError={photoError}
-              openCamera={() => this.openCamera()}
-              openCameraRoll={() => this.openCameraRoll()}
-            />
-          ) : currentPage === 2 ? (
-            <SecondPage
-              artists={artists}
-              artistsError={artistsError}
-              selectArtist={this.selectArtist}
-              isDisabled={isDisabled}
-              next={() => this.next()}
-            />
-          ) : (
-            <ThirdPage isDisabled={isDisabled} next={() => this.next()} />
-          )}
-        </View>
-      </React.Fragment>
+        {currentPage === 1 ? (
+          <FirstPage
+            photo={photo}
+            photoError={photoError}
+            openCamera={() => this.openCamera()}
+            openCameraRoll={() => this.openCameraRoll()}
+          />
+        ) : currentPage === 2 ? (
+          <SecondPage
+            artists={artists}
+            artistsError={artistsError}
+            selectArtist={this.selectArtist}
+            isDisabled={isDisabled}
+            next={() => this.next()}
+          />
+        ) : (
+          <ThirdPage isDisabled={isDisabled} next={() => this.next()} />
+        )}
+      </View>
     );
   }
 }

@@ -79,11 +79,11 @@ export default class MainScreen extends React.Component {
   componentDidMount = async () => {
     const { navigation } = this.props;
 
-    // TODO: Check if valid
     const session = await AsyncStorage.getItem("session");
     if (session !== null) {
+      console.log(session);
       await setDefaultsForApi(JSON.stringify(session));
-      await navigation.navigate("Home");
+      await navigation.navigate("OnboardingTemp");
     }
   };
 
