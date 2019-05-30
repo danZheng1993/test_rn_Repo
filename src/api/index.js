@@ -52,6 +52,43 @@ const getNewDate = () => {
   return date;
 };
 
+export function getOnboardingArtists(page, perPage) {
+  return axios({
+    ...defaultHeaders,
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate()
+    },
+    url: `/music/artists/onboarding?page=${page}&perPage=${perPage}`
+  });
+}
+
+export function getRelatedArtists(id) {
+  return axios({
+    ...defaultHeaders,
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate()
+    },
+    url: `/music/artists/related?id=${id}`
+  });
+}
+
+export const artistsFollow = Obj =>
+  axios({
+    ...defaultHeaders,
+    method: "post",
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate(),
+      "Content-Type": "application/json",
+      "x-app-device": device,
+      "x-app-session": `${cookies.session_id}`
+    },
+    url: `/music/artists`,
+    data: JSON.stringify(Obj)
+  });
+
 export function getMe() {
   return axios({
     ...defaultHeaders,
@@ -65,6 +102,22 @@ export function getMe() {
     },
     url: `/users/me`,
     data: ""
+  });
+}
+
+export function updateMe(Obj) {
+  return axios({
+    ...defaultHeaders,
+    method: "post",
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate(),
+      "Content-Type": "application/json",
+      "x-app-device": device,
+      "x-app-session": `${cookies.session_id}`
+    },
+    url: `/users/me`,
+    data: JSON.stringify(Obj)
   });
 }
 
