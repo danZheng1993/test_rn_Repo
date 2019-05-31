@@ -26,7 +26,9 @@ const Style = StyleSheet.create({
     borderRadius: 4,
     padding: 8,
     flexDirection: "column",
+    justifyContent: "center",
     alignContent: "center",
+    alignItems: "center",
     textAlign: "center"
   },
   activeTabContainer: {

@@ -34,7 +34,8 @@ export default class App extends React.Component {
         require("./assets/images/social/insta-white.png"),
         require("./assets/images/BackArrow/backArrow.png"),
         require("./assets/images/placeholder/placeholder.png"),
-        require("./assets/images/coins/coin.png")
+        require("./assets/images/coins/coin.png"),
+        require("./assets/images/coins/coinStack.png")
       ]),
       Font.loadAsync({
         CircularPro: require("./assets/fonts/CircularPro-Medium.otf"),

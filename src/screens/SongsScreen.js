@@ -6,9 +6,10 @@ import {
   PageHeader,
   LoadingIndicator,
   CoinHeader,
-  TabBar
+  TabBar,
+  CardGrid
 } from "../components";
-import { getMe } from "../api";
+import { getMe, getHistory, getSongs } from "../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -46,12 +47,15 @@ export default class SongsScreen extends React.Component {
     me: null,
     activeTab: "friends",
     songs: [],
-    currentPage: 1
+    currentPage: 1,
+    loadMoreSongs: true
   };
 
   componentDidMount = async () => {
+    // TODO: Pubnub integration
     const resp = await getMe();
-    this.setState({ me: resp.data.user, loading: false });
+    await this.updateSongCards();
+    await this.setState({ me: resp.data.user, loading: false });
   };
 
   handleTabChange = async tab => {
@@ -59,16 +63,83 @@ export default class SongsScreen extends React.Component {
     await this.updateSongCards();
   };
 
-  loadMoreSongs = async () => {};
+  loadMoreSongs = async () => {
+    const { activeTab, currentPage, songs } = this.state;
+    const query = {
+      type: activeTab,
+      page: currentPage + 1,
+      perPage: 16
+    };
 
-  updateSongCards = async () => {};
+    try {
+      const resp = await getSongs(query);
+      const tempSongs = songs.slice();
+      let loadMoreSongs = false;
+      if (resp.data.metadata) {
+        loadMoreSongs = !(
+          resp.data.metadata.current_items + songs.length ===
+          resp.data.metadata.total_items
+        );
+      }
+      if (resp.data === "") {
+        await this.setState({ loadMoreSongs: false });
+      } else {
+        const combinedSongs = tempSongs.concat(resp.data.songs);
+        await this.setState({
+          currentPage: currentPage + 1,
+          songs: combinedSongs,
+          loadMoreSongs
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  updateSongCards = async () => {
+    const { activeTab, currentPage, me, songs } = this.state;
+    if (activeTab === "taken") {
+      const historyResp = await getHistory({
+        userId: me.user_id,
+        page: currentPage,
+        perPage: 16
+      });
+      let loadMoreSongs = false;
+      if (historyResp.data.metadata) {
+        loadMoreSongs = !(
+          historyResp.data.metadata.current_items + songs.length ===
+          historyResp.data.metadata.total_items
+        );
+      }
+      await this.setState({
+        songs: historyResp.data.songs || [],
+        loadMoreSongs
+      });
+      return;
+    }
+    const query = {
+      type: activeTab,
+      page: currentPage,
+      perPage: 16
+    };
+
+    const resp = await getSongs(query);
+    let loadMoreSongs = false;
+    if (resp.data.metadata) {
+      loadMoreSongs = !(
+        resp.data.metadata.current_items + songs.length ===
+        resp.data.metadata.total_items
+      );
+    }
+    await this.setState({ songs: resp.data.songs, loadMoreSongs });
+  };
 
   render() {
     const { navigation } = this.props;
-    const { loading, activeTab } = this.state;
+    const { loading } = this.state;
     if (loading) return <LoadingIndicator />;
-    const { me } = this.state;
-    console.log(activeTab);
+    const { me, activeTab, songs, loadMoreSongs } = this.state;
+    console.log(songs);
     return (
       <View style={Style.container}>
         <CoinHeader user={me} />
@@ -84,10 +155,13 @@ export default class SongsScreen extends React.Component {
             onPress={this.handleTabChange}
             tabs={TABS}
           />
-          <RoundButton
-            text="LOAD MORE SONGS"
-            onPress={() => this.loadMoreSongs()}
-          />
+          <CardGrid songs={songs} user={me} />
+          {loadMoreSongs && (
+            <RoundButton
+              text="LOAD MORE SONGS"
+              onPress={() => this.loadMoreSongs()}
+            />
+          )}
         </View>
       </View>
     );

@@ -9,3 +9,4 @@ export { default as TabBar } from "./TabBar";
 export { default as TabBarIcon } from "./TabBarIcon";
 export { default as BackArrow } from "./BackArrow";
 export { default as ArtistCircle } from "./ArtistCircle";
+export { default as CardGrid } from "./CardGrid";

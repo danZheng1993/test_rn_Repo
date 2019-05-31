@@ -22,7 +22,6 @@ const STRIPE_KEY =
 
 axios.defaults.baseURL = API;
 const device = "android";
-let cookies;
 const defaultHeaders = {
   method: "get",
   crossDomain: true,
@@ -267,3 +266,39 @@ export function loginWithPhone(Obj) {
     data: JSON.stringify(Obj)
   });
 }
+
+export const getSongs = async Obj => {
+  const { type, page, perPage } = Obj;
+  const authHeaders = await getAuthHeaders();
+  return axios({
+    ...defaultHeaders,
+    method: "get",
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate(),
+      "Content-Type": "application/json",
+      "x-app-device": device,
+      ...authHeaders
+    },
+    url: `/music/songs/stolen?type=${type}&page=${page}&perPage=${perPage}`,
+    data: ""
+  });
+};
+
+export const getHistory = async Obj => {
+  const { userId, page, perPage } = Obj;
+  const authHeaders = await getAuthHeaders();
+  return axios({
+    ...defaultHeaders,
+    method: "get",
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate(),
+      "Content-Type": "application/json",
+      "x-app-device": device,
+      ...authHeaders
+    },
+    url: `/users/songs/stolen?userId=${userId}&page=${page}&perPage=${perPage}`,
+    data: ""
+  });
+};
