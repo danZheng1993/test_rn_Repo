@@ -19,9 +19,8 @@ import {
 } from "../api";
 import {
   GetLocationPermissions,
-  GetCameraPermissions,
+  GetUserLocation,
   GetCameraImage,
-  GetCameraRollPermissions,
   GetCameraRollImage,
   GetContactsPermissions,
   GetContacts
@@ -93,7 +92,12 @@ const Style = StyleSheet.create({
     color: "#C2B48D",
     margin: 8
   },
-  missionText: {},
+  missionText: {
+    fontFamily: "Gotham",
+    fontSize: 18,
+    lineHeight: 22,
+    color: "#FFFFFF"
+  },
   image: {
     width: 100,
     height: 100,
@@ -138,6 +142,8 @@ class OnboardingScreen extends React.Component {
         try {
           await this.followArtists();
           await GetLocationPermissions();
+          const location = await GetUserLocation();
+          console.log(location);
           await this.setState({
             artistsError: null,
             isDisabled: false,
@@ -353,9 +359,7 @@ const ThirdPage = ({ isDisabled, next }) => (
       Zion is built to spread culture with friends.
     </Text>
     <Text style={Style.missionText}>
-      <b>
-        You'll receive Zion coins you can use to boost the best music & content.
-      </b>
+      You'll receive Zion coins you can use to boost the best music & content.
     </Text>
     <Text style={Style.missionText}>
       The most highly valued artists will be invited to perform a live stream
