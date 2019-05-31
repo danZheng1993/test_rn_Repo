@@ -4,3 +4,5 @@ export { default as RoundButton } from "./RoundButton";
 export { default as BackArrow } from "./BackArrow";
 export { default as ArtistCircle } from "./ArtistCircle";
 export { default as LoadingIndicator } from "./LoadingIndicator";
+export { default as PageHeader } from "./PageHeader";
+export { default as CoinHeader } from "./CoinHeader";

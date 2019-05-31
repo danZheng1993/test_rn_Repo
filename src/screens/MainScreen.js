@@ -84,8 +84,7 @@ export default class MainScreen extends React.Component {
     if (session !== null) {
       console.log(session);
 
-      const resp = await getMe(session);
-      console.log(`result: ${resp.data.user.onboarding_done}`);
+      const resp = await getMe();
       if (!resp.data.user.onboarding_done) {
         await navigation.navigate("Onboarding");
       } else {

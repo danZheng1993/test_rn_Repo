@@ -5,7 +5,7 @@ import {
 } from "react-navigation";
 
 import { TabBarIcon } from "../components";
-import { HomeScreen } from "../screens";
+import { HomeScreen, SongsScreen } from "../screens";
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen
@@ -22,7 +22,7 @@ HomeStack.navigationOptions = {
 };
 
 const SongsStack = createStackNavigator({
-  Songs: HomeScreen
+  Songs: SongsScreen
 });
 
 SongsStack.navigationOptions = {
