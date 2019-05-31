@@ -5,9 +5,12 @@ import {
   View,
   Image,
   Linking,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  AsyncStorage
 } from "react-native";
-import { YellowButton } from "../components";
+
+import { YellowButton, LoadingIndicator } from "../components";
+import { getMe } from "../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -71,7 +74,26 @@ export default class MainScreen extends React.Component {
     header: null
   };
 
-  state = { activeTab: "signup" };
+  state = { activeTab: "signup", loading: false };
+
+  componentDidMount = async () => {
+    this.setState({ loading: true });
+    const { navigation } = this.props;
+
+    const session = await AsyncStorage.getItem("session");
+    if (session !== null) {
+      console.log(session);
+
+      const resp = await getMe(session);
+      console.log(`result: ${resp.data.user.onboarding_done}`);
+      if (!resp.data.user.onboarding_done) {
+        await navigation.navigate("Onboarding");
+      } else {
+        await navigation.navigate("Home");
+      }
+    }
+    this.setState({ loading: false });
+  };
 
   goToLogin = type => {
     const { navigation } = this.props;
@@ -90,7 +112,8 @@ export default class MainScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { activeTab } = this.state;
+    const { activeTab, loading } = this.state;
+    if (loading) return <LoadingIndicator />;
     return (
       <View style={Style.container}>
         <View style={Style.header}>

@@ -3,8 +3,6 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
 const Style = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
@@ -15,7 +13,8 @@ const Style = StyleSheet.create({
     fontFamily: "CircularProBold",
     fontSize: 12,
     lineHeight: 12,
-    color: "#000000"
+    color: "#000000",
+    padding: 4
   },
   disabledContainer: {
     flexDirection: "column",
@@ -28,7 +27,8 @@ const Style = StyleSheet.create({
     fontFamily: "CircularProBold",
     fontSize: 12,
     lineHeight: 12,
-    color: "#484848"
+    color: "#484848",
+    padding: 4
   }
 });
 
@@ -66,8 +66,18 @@ const YellowButton = ({
       <Text
         style={
           disabled
-            ? [Style.disabledText, { fontSize: fontSize || 12 }]
-            : [Style.text, { fontSize: fontSize || 12 }]
+            ? [
+                Style.disabledText,
+                {
+                  fontSize: fontSize || 12
+                }
+              ]
+            : [
+                Style.text,
+                {
+                  fontSize: fontSize || 12
+                }
+              ]
         }
       >
         {text}

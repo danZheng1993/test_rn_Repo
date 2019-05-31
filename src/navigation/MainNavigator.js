@@ -9,7 +9,7 @@ import {
 } from "../screens";
 
 const MainNavigator = createStackNavigator({
-  Home: MainScreen,
+  Main: MainScreen,
   Signup: SignupScreen,
   Login: LoginScreen,
   Onboarding: OnboardingScreen

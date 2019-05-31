@@ -1,6 +1,6 @@
 import React from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
-import { AppLoading, Asset, Font, Icon, Constants, Amplitude } from "expo";
+import { AppLoading, Asset, Font, Constants, Amplitude } from "expo";
 import Sentry from "sentry-expo";
 import { AppNavigator } from "./src/navigation";
 
@@ -32,7 +32,8 @@ export default class App extends React.Component {
         require("./assets/images/navbar/search.png"),
         require("./assets/images/navbar/songs.png"),
         require("./assets/images/social/insta-white.png"),
-        require("./assets/images/BackArrow/backArrow.png")
+        require("./assets/images/BackArrow/backArrow.png"),
+        require("./assets/images/placeholder/placeholder.png")
       ]),
       Font.loadAsync({
         CircularPro: require("./assets/fonts/CircularPro-Medium.otf"),
