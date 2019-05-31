@@ -7,6 +7,7 @@ import {
   Text,
   TouchableWithoutFeedback
 } from "react-native";
+import MarqueeText from "react-native-marquee";
 
 import YellowButton from "./YellowButton";
 import { formatNum } from "../utils";
@@ -28,13 +29,14 @@ const Style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
-    alignContent: "center"
+    alignContent: "center",
+    zIndex: 2
   },
   contentContainer: {
+    maxHeight: "100%",
     flexDirection: "column",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    alignContent: "center"
+    justifyContent: "space-between",
+    margin: 8
   },
   ownerContainer: {
     flexDirection: "row",
@@ -44,9 +46,7 @@ const Style = StyleSheet.create({
   },
   belongsContainer: {
     flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignContent: "center"
+    justifyContent: "space-between"
   },
   text: {
     fontFamily: "CircularProBook",
@@ -60,7 +60,7 @@ const Style = StyleSheet.create({
     lineHeight: 25
   },
   artistNameText: {
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 25,
     color: "#C0B491"
   },
@@ -74,12 +74,15 @@ const Style = StyleSheet.create({
   },
   album: {
     height: 100,
-    width: 141
+    width: 141,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5
   },
   ownerAvatar: {
     width: 30,
     height: 30,
-    borderRadius: 15
+    borderRadius: 15,
+    marginRight: 8
   },
   coinStack: {
     width: 21,
@@ -127,7 +130,15 @@ class SongCard extends React.Component {
             resizeMode="cover"
           />
           <View style={Style.contentContainer}>
-            <Text style={[Style.text, Style.songNameText]}>{song.name}</Text>
+            <MarqueeText
+              style={[Style.text, Style.songNameText]}
+              duration={3000}
+              marqueeOnStart
+              loop
+              useNativeDriver
+            >
+              {song.name}
+            </MarqueeText>
             <Text style={[Style.text, Style.artistNameText]}>
               {song.artists[0].name}
             </Text>
@@ -155,8 +166,9 @@ class SongCard extends React.Component {
             </View>
             <YellowButton
               text={isOwner ? `SHARE` : "BOOST"}
-              width={127}
+              width={120}
               height={25}
+              margin={0}
             />
           </View>
         </View>
