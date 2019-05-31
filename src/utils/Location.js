@@ -7,16 +7,19 @@ const GetLocationPermissions = async () => {
 };
 
 const GetUserLocation = async () => {
+  // TODO: Fix issue with hanging in getCurrentPositionAsync
   const locationPermissionGranted = await GetLocationPermissions();
 
   if (locationPermissionGranted) {
-    const locationEnabled = await Location.getProviderStatusAsync();
-
-    if (locationEnabled) {
-      const location = await Location.getCurrentPositionAsync({
-        enableHighAccuracy: false,
-        maximumAge: 1000 * 60 * 10 // 10 minutes
-      });
+    const { locationServicesEnabled } = await Location.getProviderStatusAsync();
+    let location;
+    if (locationServicesEnabled) {
+      try {
+        location = await Location.getCurrentPositionAsync({});
+      } catch (error) {
+        Alert.alert(error);
+        return;
+      }
       AsyncStorage.setItem(
         "location",
         JSON.stringify({

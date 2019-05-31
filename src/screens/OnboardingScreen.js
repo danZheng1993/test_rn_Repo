@@ -1,6 +1,13 @@
 /* eslint-disable no-nested-ternary */
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  FlatList
+} from "react-native";
 
 import { YellowButton, ArtistCircle } from "../components";
 import {
@@ -11,10 +18,8 @@ import {
   artistsFollow
 } from "../api";
 import {
-  GetLocationPermissions,
-  GetCameraPermissions,
+  GetUserLocation,
   GetCameraImage,
-  GetCameraRollPermissions,
   GetCameraRollImage,
   GetContactsPermissions,
   GetContacts
@@ -34,7 +39,7 @@ const Style = StyleSheet.create({
     textAlign: "center"
   },
   pageContainer: {
-    height: "60%",
+    height: "80%",
     width: "100%",
     flexDirection: "column",
     justifyContent: "space-evenly",
@@ -46,9 +51,22 @@ const Style = StyleSheet.create({
     position: "absolute",
     top: 0,
     right: 0,
-    margin: 8
+    margin: 8,
+    padding: 8
   },
-  gridContainer: {},
+  gridContainer: {
+    flex: 1,
+    height: "50%",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    alignContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    marginTop: 16,
+    marginBottom: 16
+  },
   headerText: {
     fontFamily: "Gotham",
     fontSize: 16,
@@ -64,6 +82,7 @@ const Style = StyleSheet.create({
     color: "#BD1E1E"
   },
   skipText: {
+    fontSize: 14,
     color: "#BDBDBD"
   },
   logoText: {
@@ -72,8 +91,17 @@ const Style = StyleSheet.create({
     color: "#C2B48D",
     margin: 8
   },
-  missionText: {},
-  image: {}
+  missionText: {
+    fontFamily: "Gotham",
+    fontSize: 18,
+    lineHeight: 22,
+    color: "#FFFFFF"
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 50
+  }
 });
 
 class OnboardingScreen extends React.Component {
@@ -92,14 +120,16 @@ class OnboardingScreen extends React.Component {
   };
 
   componentDidMount = async () => {
-    const { navigation } = this.props;
-    const respMe = await getMe();
-    if (respMe.data.user.onboarding_done) {
-      navigation.navigate("Home");
-      return;
+    // TODO: Fix routing back every time
+
+    try {
+      const resp = await getOnboardingArtists(1, 10);
+      await this.setState({
+        artists: resp.data
+      });
+    } catch (error) {
+      console.log(error);
     }
-    const resp = await getOnboardingArtists(1, 10);
-    await this.setState({ artists: resp.data });
   };
 
   next = async () => {
@@ -109,7 +139,7 @@ class OnboardingScreen extends React.Component {
       if (selectedArtists.length > 2) {
         try {
           await this.followArtists();
-          await GetLocationPermissions();
+          await GetUserLocation();
           await this.setState({
             artistsError: null,
             isDisabled: false,
@@ -186,17 +216,24 @@ class OnboardingScreen extends React.Component {
   };
 
   openCamera = async () => {
-    // TODO: Implement
-    // await handlePhotoChange()
+    const photo = await GetCameraImage();
+    if (!photo.cancelled) {
+      await this.handlePhotoChange(photo);
+    }
   };
 
   openCameraRoll = async () => {
-    // TODO: Implement
-    // await handlePhotoChange()
+    const photo = await GetCameraRollImage();
+    if (!photo.cancelled) {
+      await this.handlePhotoChange(photo);
+    }
   };
 
   handlePhotoChange = async photo => {
     await this.setState({ photo });
+    await updateMe({
+      photo: `data:image/png;base64,${photo.base64}`
+    });
   };
 
   render() {
@@ -208,9 +245,9 @@ class OnboardingScreen extends React.Component {
       artistsError,
       isDisabled
     } = this.state;
-    if (isDisabled) this.checkButtonStatus();
+    if (isDisabled && currentPage !== 1) this.checkButtonStatus();
     return (
-      <React.Fragment>
+      <View style={Style.container}>
         {currentPage === 1 && (
           <TouchableOpacity
             onPress={this.skipProfilePicture}
@@ -219,27 +256,25 @@ class OnboardingScreen extends React.Component {
             <Text style={Style.skipText}>Next</Text>
           </TouchableOpacity>
         )}
-        <View style={Style.container}>
-          {currentPage === 1 ? (
-            <FirstPage
-              photo={photo}
-              photoError={photoError}
-              openCamera={() => this.openCamera()}
-              openCameraRoll={() => this.openCameraRoll()}
-            />
-          ) : currentPage === 2 ? (
-            <SecondPage
-              artists={artists}
-              artistsError={artistsError}
-              selectArtist={this.selectArtist}
-              isDisabled={isDisabled}
-              next={() => this.next()}
-            />
-          ) : (
-            <ThirdPage isDisabled={isDisabled} next={() => this.next()} />
-          )}
-        </View>
-      </React.Fragment>
+        {currentPage === 1 ? (
+          <FirstPage
+            photo={photo}
+            photoError={photoError}
+            openCamera={() => this.openCamera()}
+            openCameraRoll={() => this.openCameraRoll()}
+          />
+        ) : currentPage === 2 ? (
+          <SecondPage
+            artists={artists}
+            artistsError={artistsError}
+            selectArtist={this.selectArtist}
+            isDisabled={isDisabled}
+            next={() => this.next()}
+          />
+        ) : (
+          <ThirdPage isDisabled={isDisabled} next={() => this.next()} />
+        )}
+      </View>
     );
   }
 }
@@ -291,14 +326,17 @@ const SecondPage = ({
       These selections will help customize Zion just for you. Select at least 3
       artists.
     </Text>
+    <FlatList
+      data={artists}
+      numColumns={2}
+      keyExtractor={item => `${item.id}`}
+      renderItem={({ item }) => (
+        <ArtistCircle artist={item} onClick={selectArtist} />
+      )}
+    />
     {artistsError && (
       <Text style={[Style.headerText, Style.errorText]}>{artistsError}</Text>
     )}
-    <View style={Style.gridContainer}>
-      {artists.map(a => (
-        <ArtistCircle artist={a} key={a.id} onClick={selectArtist} />
-      ))}
-    </View>
     <YellowButton
       width={256}
       height={50}
@@ -317,9 +355,7 @@ const ThirdPage = ({ isDisabled, next }) => (
       Zion is built to spread culture with friends.
     </Text>
     <Text style={Style.missionText}>
-      <b>
-        You'll receive Zion coins you can use to boost the best music & content.
-      </b>
+      You'll receive Zion coins you can use to boost the best music & content.
     </Text>
     <Text style={Style.missionText}>
       The most highly valued artists will be invited to perform a live stream

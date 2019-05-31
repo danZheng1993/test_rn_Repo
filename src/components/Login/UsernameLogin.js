@@ -2,11 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, AsyncStorage, TextInput } from "react-native";
 
 import { YellowButton, BackArrow } from "../../components";
-import {
-  loginWithUsername,
-  userNameAvailability,
-  setDefaultsForApi
-} from "../../api";
+import { loginWithUsername, userNameAvailability } from "../../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -162,7 +158,6 @@ class UsernameLogin extends React.Component {
       const { session } = resp.data;
 
       await AsyncStorage.setItem("session", JSON.stringify(session));
-      await setDefaultsForApi(JSON.stringify(session));
       await navigation.navigate("Home");
     } catch (error) {
       console.log(error);

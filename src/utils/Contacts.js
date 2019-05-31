@@ -14,6 +14,8 @@ const GetContacts = async () => {
     console.log(contacts);
 
     // TODO: Finish
+  } else {
+    Alert.alert("Contact permissions required.");
   }
 };
 

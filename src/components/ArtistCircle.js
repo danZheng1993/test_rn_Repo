@@ -8,36 +8,50 @@ import {
 } from "react-native";
 
 const Style = StyleSheet.create({
+  container: {
+    position: "relative",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    margin: 8
+  },
   artistContainer: {
-    width: 50,
-    height: 50,
-    margin: 20,
-    borderRadius: 25
+    width: 100,
+    height: 100,
+    borderRadius: 50
   },
   selectedArtistContainer: {
+    position: "absolute",
+    top: -5,
+    left: -5,
+    width: 110,
+    height: 110,
+    borderRadius: 55,
     borderWidth: 10,
     borderColor: "#C2B48D"
   },
   img: {
-    width: 50,
-    height: 50,
-    borderRadius: 25
+    width: 100,
+    height: 100,
+    borderRadius: 50
   },
   name: {
-    fontFamily: " Gotham",
-    fontSize: 20,
-    textAlign: "center",
+    fontFamily: "GothamBook",
+    fontSize: 14,
     color: "#ffffff",
-    marginTop: 20
+    marginTop: 8
   }
 });
 
-class ArtistCircle extends React.Component {
+class ArtistCircle extends React.PureComponent {
   state = { selected: false };
 
   render() {
     const { artist, onClick } = this.props;
     const { selected } = this.state;
+    const uri = artist.images[artist.images.length - 1].url;
     return (
       <TouchableWithoutFeedback
         onPress={() => {
@@ -45,24 +59,20 @@ class ArtistCircle extends React.Component {
           onClick(artist);
         }}
       >
-        {selected ? (
-          <View style={[Style.artistContainer, Style.selectedArtistContainer]}>
-            <Image
-              style={Style.img}
-              source={artist.images[artist.images.length - 1].url}
-              alt={artist.name}
-            />
-          </View>
-        ) : (
+        <View style={Style.container}>
           <View style={Style.artistContainer}>
+            {selected && <View style={Style.selectedArtistContainer} />}
             <Image
               style={Style.img}
-              source={artist.images[artist.images.length - 1].url}
+              source={
+                { uri } ||
+                require("../../assets/images/placeholder/placeholder.png")
+              }
               alt={artist.name}
             />
           </View>
-        )}
-        <Text style={Style.name}>{artist.name}</Text>
+          <Text style={Style.name}>{artist.name}</Text>
+        </View>
       </TouchableWithoutFeedback>
     );
   }
