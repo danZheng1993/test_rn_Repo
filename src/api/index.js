@@ -107,7 +107,8 @@ export const getMe = async () => {
   });
 };
 
-export function updateMe(Obj) {
+export const updateMe = async Obj => {
+  const authHeaders = await getAuthHeaders();
   return axios({
     ...defaultHeaders,
     method: "post",
@@ -116,12 +117,12 @@ export function updateMe(Obj) {
       "x-app-date": getNewDate(),
       "Content-Type": "application/json",
       "x-app-device": device,
-      "x-app-session": `${cookies.session_id}`
+      ...authHeaders
     },
     url: `/users/me`,
     data: JSON.stringify(Obj)
   });
-}
+};
 
 export const userNameAvailability = username =>
   axios({
