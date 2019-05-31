@@ -15,7 +15,6 @@ const Style = StyleSheet.create({
   container: {
     height: 222,
     width: 141,
-    flex: 1,
     backgroundColor: "#3E3E3E",
     borderRadius: 5
   },
@@ -44,7 +43,7 @@ const Style = StyleSheet.create({
     alignContent: "center"
   },
   belongsContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
     alignContent: "center"
@@ -90,18 +89,26 @@ const Style = StyleSheet.create({
 
 class SongCard extends React.Component {
   state = {
-    showBuyModal: false
+    showBuyModal: false,
+    showShareModal: false
   };
 
   openBuyModal = () => this.setState({ showBuyModal: true });
   closeBuyModal = () => this.setState({ showBuyModal: false });
 
+  openShareModal = () => this.setState({ showShareModal: true });
+  closeShareModal = () => this.setState({ showShareModal: false });
+
   render() {
     const { song, user } = this.props;
-    const { showBuyModal } = this.state;
+    const { showBuyModal, showShareModal } = this.state;
     const isOwner = Number(song.user.id) === user.user_id;
     return (
-      <TouchableWithoutFeedback onPress={() => this.openBuyModal()}>
+      <TouchableWithoutFeedback
+        onPress={
+          isOwner ? () => this.openShareModal() : () => this.openBuyModal()
+        }
+      >
         <View style={Style.container}>
           <View style={Style.priceContainer}>
             <Image
@@ -117,7 +124,7 @@ class SongCard extends React.Component {
             source={{ uri: song.album.images[0].url }}
             alt={song.name}
             style={Style.album}
-            resizeMode="contain"
+            resizeMode="cover"
           />
           <View style={Style.contentContainer}>
             <Text style={[Style.text, Style.songNameText]}>{song.name}</Text>

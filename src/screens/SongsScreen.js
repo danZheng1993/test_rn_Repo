@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import {
-  RoundButton,
   PageHeader,
   LoadingIndicator,
   CoinHeader,
@@ -18,9 +17,8 @@ const Style = StyleSheet.create({
     backgroundColor: "#2D2D2D"
   },
   contentContainer: {
-    flex: 1,
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     alignContent: "center",
     paddingTop: 45,
@@ -139,7 +137,6 @@ export default class SongsScreen extends React.Component {
     const { loading } = this.state;
     if (loading) return <LoadingIndicator />;
     const { me, activeTab, songs, loadMoreSongs } = this.state;
-    console.log(songs);
     return (
       <View style={Style.container}>
         <CoinHeader user={me} />
@@ -155,13 +152,12 @@ export default class SongsScreen extends React.Component {
             onPress={this.handleTabChange}
             tabs={TABS}
           />
-          <CardGrid songs={songs} user={me} />
-          {loadMoreSongs && (
-            <RoundButton
-              text="LOAD MORE SONGS"
-              onPress={() => this.loadMoreSongs()}
-            />
-          )}
+          <CardGrid
+            songs={songs}
+            user={me}
+            canLoadMore={loadMoreSongs}
+            loadMoreSongs={this.loadMoreSongs}
+          />
         </View>
       </View>
     );

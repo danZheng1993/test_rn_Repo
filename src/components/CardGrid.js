@@ -1,14 +1,20 @@
 import React from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 
-import { SongCard } from "../components";
+import { SongCard, RoundButton } from "../components";
 
 const Style = StyleSheet.create({
   container: {
-    width: "90%",
-    flex: 1,
+    width: "100%",
+    height: "80%",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"
+  },
+  column: {
+    marginLeft: 8,
+    marginRight: 16,
+    marginBottom: 8
   }
 });
 
@@ -19,14 +25,27 @@ class CardGrid extends React.Component {
   };
 
   render() {
-    const { cards, user } = this.props;
+    const { songs, user, canLoadMoreSongs, loadMoreSongs } = this.props;
     return (
       <View style={Style.container}>
         <FlatList
-          data={cards}
+          columnWrapperStyle={Style.column}
+          data={songs}
           numColumns={2}
-          keyExtractor={item => `${item.id}`}
+          initialNumToRender={4}
+          keyExtractor={item => item.id}
           renderItem={({ item }) => <SongCard song={item} user={user} />}
+          ListFooterComponent={() => {
+            if (canLoadMoreSongs)
+              return (
+                <RoundButton
+                  text="LOAD MORE SONGS"
+                  onPress={() => loadMoreSongs()}
+                />
+              );
+            return null;
+          }}
+          // ListEmptyComponent
         />
       </View>
     );

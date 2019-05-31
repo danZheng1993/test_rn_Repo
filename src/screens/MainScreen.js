@@ -88,7 +88,7 @@ export default class MainScreen extends React.Component {
       if (!resp.data.user.onboarding_done) {
         await navigation.navigate("Onboarding");
       } else {
-        await navigation.navigate("Home");
+        await navigation.navigate("Songs");
       }
     }
     this.setState({ loading: false });
