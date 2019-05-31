@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  AsyncStorage,
-  TouchableOpacity
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import {
   RoundButton,
   PageHeader,
   LoadingIndicator,
-  CoinHeader
+  CoinHeader,
+  TabBar
 } from "../components";
 import { getMe } from "../api";
 
@@ -30,6 +25,13 @@ const Style = StyleSheet.create({
   }
 });
 
+const TABS = [
+  { value: "friends", label: "Friends" },
+  { value: "top", label: "Top" },
+  { value: "new", label: "New" },
+  { value: "taken", label: "Taken" }
+];
+
 export default class SongsScreen extends React.Component {
   static navigationOptions = {
     header: null
@@ -37,7 +39,10 @@ export default class SongsScreen extends React.Component {
 
   state = {
     loading: true,
-    me: null
+    me: null,
+    activeTab: "friends",
+    songs: [],
+    currentPage: 1
   };
 
   componentDidMount = async () => {
@@ -45,13 +50,21 @@ export default class SongsScreen extends React.Component {
     this.setState({ me: resp.data.user, loading: false });
   };
 
+  handleTabChange = async tab => {
+    await this.setState({ activeTab: tab });
+    await this.updateSongCards();
+  };
+
   loadMoreSongs = async () => {};
+
+  updateSongCards = async () => {};
 
   render() {
     const { navigation } = this.props;
-    const { loading } = this.state;
+    const { loading, activeTab } = this.state;
     if (loading) return <LoadingIndicator />;
     const { me } = this.state;
+    console.log(activeTab);
     return (
       <View style={Style.container}>
         <CoinHeader user={me} />
@@ -61,6 +74,11 @@ export default class SongsScreen extends React.Component {
             subtitle="BUILD A CULTURE"
             user={me}
             navigation={navigation}
+          />
+          <TabBar
+            value={activeTab}
+            onPress={this.handleTabChange}
+            tabs={TABS}
           />
           <RoundButton
             text="LOAD MORE SONGS"
