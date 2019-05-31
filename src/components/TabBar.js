@@ -4,23 +4,31 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 const Style = StyleSheet.create({
   container: {
     width: "80%",
-    height: 26,
+    height: 44,
+    maxHeight: 44,
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    textAlign: "center",
     backgroundColor: "#3E3E3E",
     borderRadius: 4
   },
   barContainer: {
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    height: 44,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly"
+  },
+  tabContainer: {
+    width: "100%",
+    height: 44,
+    borderRadius: 4,
+    padding: 8,
+    flexDirection: "column",
     alignContent: "center",
     textAlign: "center"
   },
-  tabContainer: {},
   activeTabContainer: {
     backgroundColor: "#C2B48D"
   },
@@ -31,9 +39,6 @@ const Style = StyleSheet.create({
     color: "#BBC2CF"
   },
   activeTabText: {
-    fontFamily: "CircularPro",
-    fontSize: 12,
-    lineHeight: 15,
     color: "#000000"
   }
 });
@@ -46,9 +51,19 @@ const TabBar = ({ value, onPress, tabs }) => (
         return (
           <TouchableOpacity onPress={() => onPress(t.value)} key={t.label}>
             <View
-              style={isActive ? Style.activeTabContainer : Style.tabContainer}
+              style={
+                isActive
+                  ? [Style.tabContainer, Style.activeTabContainer]
+                  : Style.tabContainer
+              }
             >
-              <Text style={isActive ? Style.activeTabText : Style.tabText}>
+              <Text
+                style={
+                  isActive
+                    ? [Style.tabText, Style.activeTabText]
+                    : Style.tabText
+                }
+              >
                 {t.label}
               </Text>
             </View>

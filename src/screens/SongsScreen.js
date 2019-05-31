@@ -18,6 +18,10 @@ const Style = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
     paddingTop: 45,
     paddingBottom: 13,
     paddingLeft: 18,
