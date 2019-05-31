@@ -40,7 +40,14 @@ const PageHeader = ({ title, subtitle, user: { photo, name }, navigation }) => (
       <TouchableOpacity
         onPress={() => navigation.navigate("Profile", { name })}
       >
-        <Image source={{ uri: photo }} style={Style.avatar} alt={name} />
+        <Image
+          source={
+            { uri: photo } ||
+            require("../../assets/images/placeholder/placeholder.png")
+          }
+          style={Style.avatar}
+          alt={name}
+        />
       </TouchableOpacity>
     </View>
     <Text style={Style.subtitle}>{subtitle}</Text>
