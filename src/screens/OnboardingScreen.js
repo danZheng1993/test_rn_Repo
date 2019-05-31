@@ -18,7 +18,6 @@ import {
   artistsFollow
 } from "../api";
 import {
-  GetLocationPermissions,
   GetUserLocation,
   GetCameraImage,
   GetCameraRollImage,
@@ -125,7 +124,6 @@ class OnboardingScreen extends React.Component {
 
     try {
       const resp = await getOnboardingArtists(1, 10);
-      console.log(resp.data);
       await this.setState({
         artists: resp.data
       });
@@ -141,9 +139,7 @@ class OnboardingScreen extends React.Component {
       if (selectedArtists.length > 2) {
         try {
           await this.followArtists();
-          await GetLocationPermissions();
-          const location = await GetUserLocation();
-          console.log(location);
+          await GetUserLocation();
           await this.setState({
             artistsError: null,
             isDisabled: false,
