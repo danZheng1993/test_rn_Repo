@@ -4,9 +4,10 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 const Style = StyleSheet.create({
   container: {
     width: "100%",
-    flex: 1,
     flexDirection: "column",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
+    marginTop: 16,
+    marginBottom: 16
   },
   row: {
     flexDirection: "row",

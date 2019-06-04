@@ -12,11 +12,12 @@ import { getMe, getHistory, getSongs } from "../api";
 
 const Style = StyleSheet.create({
   container: {
-    flex: 1,
+    height: "100%",
     width: "100%",
     backgroundColor: "#2D2D2D"
   },
   contentContainer: {
+    flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
