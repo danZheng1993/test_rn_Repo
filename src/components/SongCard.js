@@ -120,7 +120,7 @@ class SongCard extends React.Component {
               style={Style.coinStack}
             />
             <Text style={[Style.text, Style.coinText]}>
-              {formatNum(user.coins)}
+              {formatNum(song.price_value)}
             </Text>
           </View>
           <Image
@@ -139,9 +139,15 @@ class SongCard extends React.Component {
             >
               {song.name}
             </MarqueeText>
-            <Text style={[Style.text, Style.artistNameText]}>
+            <MarqueeText
+              style={[Style.text, Style.artistNameText]}
+              duration={3000}
+              marqueeOnStart
+              loop
+              useNativeDriver
+            >
               {song.artists[0].name}
-            </Text>
+            </MarqueeText>
             <View style={Style.ownerContainer}>
               <Image
                 source={{
