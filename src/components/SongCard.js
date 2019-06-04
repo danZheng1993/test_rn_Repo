@@ -14,7 +14,7 @@ import { formatNum } from "../utils";
 
 const Style = StyleSheet.create({
   container: {
-    height: 222,
+    height: 242,
     width: 141,
     backgroundColor: "#3E3E3E",
     borderRadius: 5
@@ -26,10 +26,15 @@ const Style = StyleSheet.create({
     marginTop: 8,
     height: 22,
     minWidth: 50,
+    maxWidth: "100%",
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
     alignContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
+    padding: 8,
     zIndex: 2
   },
   contentContainer: {
@@ -86,8 +91,9 @@ const Style = StyleSheet.create({
     marginRight: 8
   },
   coinStack: {
-    width: 21,
-    height: 21
+    width: 16,
+    height: 16,
+    marginRight: 4
   }
 });
 
@@ -156,10 +162,9 @@ class SongCard extends React.Component {
               {song.artists[0].name}
             </MarqueeText>
             <TouchableWithoutFeedback
-              style={Style.ownerContainer}
               onPress={() => this.goToProfile(song.user.id)}
             >
-              <React.Fragment>
+              <View style={Style.ownerContainer}>
                 <Image
                   source={{
                     uri:
@@ -180,13 +185,14 @@ class SongCard extends React.Component {
                       : `NO ONE`}
                   </Text>
                 </View>
-              </React.Fragment>
+              </View>
             </TouchableWithoutFeedback>
             <YellowButton
               text={isOwner ? `SHARE` : "BOOST"}
-              width={120}
-              height={25}
-              margin={0}
+              width="100%"
+              height={30}
+              marginRight={0}
+              marginLeft={0}
               onPress={
                 isOwner
                   ? () => this.openShareModal()
