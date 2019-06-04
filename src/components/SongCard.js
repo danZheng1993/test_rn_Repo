@@ -34,6 +34,7 @@ const Style = StyleSheet.create({
   },
   contentContainer: {
     maxHeight: "100%",
+    maxWidth: "100%",
     flexDirection: "column",
     justifyContent: "space-between",
     margin: 8
@@ -102,16 +103,22 @@ class SongCard extends React.Component {
   openShareModal = () => this.setState({ showShareModal: true });
   closeShareModal = () => this.setState({ showShareModal: false });
 
+  goToProfile = id => {
+    const { navigation } = this.props;
+    navigation.navigate("Profile", { id });
+  };
+
+  goToSongPage = id => {
+    const { navigation } = this.props;
+    navigation.navigate("Song", { id });
+  };
+
   render() {
     const { song, user } = this.props;
     const { showBuyModal, showShareModal } = this.state;
     const isOwner = Number(song.user.id) === user.user_id;
     return (
-      <TouchableWithoutFeedback
-        onPress={
-          isOwner ? () => this.openShareModal() : () => this.openBuyModal()
-        }
-      >
+      <TouchableWithoutFeedback onPress={() => this.goToSongPage(song.id)}>
         <View style={Style.container}>
           <View style={Style.priceContainer}>
             <Image
@@ -148,33 +155,43 @@ class SongCard extends React.Component {
             >
               {song.artists[0].name}
             </MarqueeText>
-            <View style={Style.ownerContainer}>
-              <Image
-                source={{
-                  uri:
-                    song.user.thumbnail_url !== null
-                      ? song.user.thumbnail_url
-                      : require("../../assets/images/placeholder/placeholder.png")
-                }}
-                alt={song.user.username}
-                style={Style.ownerAvatar}
-              />
-              <View style={Style.belongsContainer}>
-                <Text style={Style.text}>BELONGS TO</Text>
-                <Text style={[Style.text, Style.ownerText]}>
-                  {song.user
-                    ? isOwner
-                      ? `YOU`
-                      : song.user.username
-                    : `NO ONE`}
-                </Text>
-              </View>
-            </View>
+            <TouchableWithoutFeedback
+              style={Style.ownerContainer}
+              onPress={() => this.goToProfile(song.user.id)}
+            >
+              <React.Fragment>
+                <Image
+                  source={{
+                    uri:
+                      song.user.thumbnail_url !== null
+                        ? song.user.thumbnail_url
+                        : require("../../assets/images/placeholder/placeholder.png")
+                  }}
+                  alt={song.user.username}
+                  style={Style.ownerAvatar}
+                />
+                <View style={Style.belongsContainer}>
+                  <Text style={Style.text}>BELONGS TO</Text>
+                  <Text style={[Style.text, Style.ownerText]}>
+                    {song.user
+                      ? isOwner
+                        ? `YOU`
+                        : song.user.username
+                      : `NO ONE`}
+                  </Text>
+                </View>
+              </React.Fragment>
+            </TouchableWithoutFeedback>
             <YellowButton
               text={isOwner ? `SHARE` : "BOOST"}
               width={120}
               height={25}
               margin={0}
+              onPress={
+                isOwner
+                  ? () => this.openShareModal()
+                  : () => this.openBuyModal()
+              }
             />
           </View>
         </View>
