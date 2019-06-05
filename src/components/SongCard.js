@@ -116,25 +116,26 @@ class SongCard extends React.Component {
     soundObject: null
   };
 
-  togglePlaying = () => {
+  togglePlaying = async () => {
     const { isPlaying } = this.state;
 
     if (isPlaying) {
-      this.setState({ isPlaying: false });
+      await this.stopSong();
       return;
     }
-    this.setState({ isPlaying: true });
-    this.playSong();
+    await this.playSong();
   };
 
   playSong = async () => {
     const { song } = this.props;
     const soundObject = new Audio.Sound();
     soundObject.setOnPlaybackStatusUpdate(this.updatePlayStatus);
+    soundObject.setProgressUpdateIntervalAsync(500);
     this.setState({ soundObject });
     try {
       await soundObject.loadAsync({ uri: song.preview_url });
       await soundObject.playAsync();
+      this.setState({ isPlaying: true });
     } catch (error) {
       console.log(error);
     }
@@ -145,13 +146,17 @@ class SongCard extends React.Component {
     try {
       await soundObject.stopAsync();
       await soundObject.unloadAsync();
+      soundObject.setOnPlaybackStatusUpdate(null);
+      this.setState({ isPlaying: false, soundObject: null });
     } catch (error) {
       console.log(error);
     }
   };
 
-  updatePlayStatus = e => {
-    if (!e.isPlaying) this.setState({ isPlaying: false });
+  updatePlayStatus = async e => {
+    if (e.isLoaded && e.didJustFinish) {
+      await this.stopSong();
+    }
   };
 
   openBuyModal = () => this.setState({ showBuyModal: true });
