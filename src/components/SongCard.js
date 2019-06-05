@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React from "react";
+import { Audio } from "expo";
 import {
   View,
   StyleSheet,
@@ -39,7 +40,6 @@ const Style = StyleSheet.create({
   },
   playContainer: {
     width: 20,
-    height: 20,
     position: "absolute",
     top: "20%",
     left: "45%",
@@ -104,8 +104,7 @@ const Style = StyleSheet.create({
     marginRight: 4
   },
   play: {
-    width: 16,
-    height: 16
+    width: 20
   }
 });
 
@@ -113,7 +112,8 @@ class SongCard extends React.Component {
   state = {
     showBuyModal: false,
     showShareModal: false,
-    isPlaying: false
+    isPlaying: false,
+    soundObject: null
   };
 
   togglePlaying = () => {
@@ -124,6 +124,34 @@ class SongCard extends React.Component {
       return;
     }
     this.setState({ isPlaying: true });
+    this.playSong();
+  };
+
+  playSong = async () => {
+    const { song } = this.props;
+    const soundObject = new Audio.Sound();
+    soundObject.setOnPlaybackStatusUpdate(this.updatePlayStatus);
+    this.setState({ soundObject });
+    try {
+      await soundObject.loadAsync({ uri: song.preview_url });
+      await soundObject.playAsync();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  stopSong = async () => {
+    const { soundObject } = this.state;
+    try {
+      await soundObject.stopAsync();
+      await soundObject.unloadAsync();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  updatePlayStatus = e => {
+    if (!e.isPlaying) this.setState({ isPlaying: false });
   };
 
   openBuyModal = () => this.setState({ showBuyModal: true });
@@ -159,19 +187,23 @@ class SongCard extends React.Component {
               {formatNum(song.price_value)}
             </Text>
           </View>
-          <View style={Style.playContainer}>
+          {song.preview_url ? (
             <TouchableWithoutFeedback onPress={() => this.togglePlaying()}>
-              <Image
-                source={
-                  isPlaying
-                    ? require("../../assets/images/controls/pause.png")
-                    : require("../../assets/images/controls/play.png")
-                }
-                alt="play"
-                style={Style.play}
-              />
+              <View style={Style.playContainer}>
+                <Image
+                  source={
+                    isPlaying
+                      ? require("../../assets/images/controls/pause.png")
+                      : require("../../assets/images/controls/play.png")
+                  }
+                  alt="play"
+                  style={Style.play}
+                />
+              </View>
             </TouchableWithoutFeedback>
-          </View>
+          ) : (
+            <React.Fragment />
+          )}
           <Image
             source={{ uri: song.album.images[0].url }}
             alt={song.name}
