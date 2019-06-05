@@ -143,10 +143,10 @@ class SongCard extends React.Component {
 
   stopSong = async () => {
     const { soundObject } = this.state;
+    soundObject.setOnPlaybackStatusUpdate(null);
     try {
       await soundObject.stopAsync();
       await soundObject.unloadAsync();
-      soundObject.setOnPlaybackStatusUpdate(null);
       this.setState({ isPlaying: false, soundObject: null });
     } catch (error) {
       console.log(error);
