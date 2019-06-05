@@ -25,7 +25,13 @@ class CardGrid extends React.Component {
   };
 
   render() {
-    const { songs, user, canLoadMoreSongs, loadMoreSongs } = this.props;
+    const {
+      songs,
+      user,
+      canLoadMoreSongs,
+      loadMoreSongs,
+      navigation
+    } = this.props;
     return (
       <View style={Style.container}>
         <FlatList
@@ -35,7 +41,7 @@ class CardGrid extends React.Component {
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <View style={Style.cardContainer}>
-              <SongCard song={item} user={user} />
+              <SongCard song={item} user={user} navigation={navigation} />
             </View>
           )}
           ListFooterComponent={() => {

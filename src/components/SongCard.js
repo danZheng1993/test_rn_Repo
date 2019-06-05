@@ -37,6 +37,14 @@ const Style = StyleSheet.create({
     padding: 8,
     zIndex: 2
   },
+  playContainer: {
+    width: 20,
+    height: 20,
+    position: "absolute",
+    top: "20%",
+    left: "45%",
+    zIndex: 2
+  },
   contentContainer: {
     maxHeight: "100%",
     maxWidth: "100%",
@@ -94,13 +102,28 @@ const Style = StyleSheet.create({
     width: 16,
     height: 16,
     marginRight: 4
+  },
+  play: {
+    width: 16,
+    height: 16
   }
 });
 
 class SongCard extends React.Component {
   state = {
     showBuyModal: false,
-    showShareModal: false
+    showShareModal: false,
+    isPlaying: false
+  };
+
+  togglePlaying = () => {
+    const { isPlaying } = this.state;
+
+    if (isPlaying) {
+      this.setState({ isPlaying: false });
+      return;
+    }
+    this.setState({ isPlaying: true });
   };
 
   openBuyModal = () => this.setState({ showBuyModal: true });
@@ -114,17 +137,17 @@ class SongCard extends React.Component {
     navigation.navigate("Profile", { id });
   };
 
-  goToSongPage = id => {
+  goToCardPage = id => {
     const { navigation } = this.props;
-    navigation.navigate("Song", { id });
+    navigation.navigate("Card", { id });
   };
 
   render() {
     const { song, user } = this.props;
-    const { showBuyModal, showShareModal } = this.state;
+    const { showBuyModal, showShareModal, isPlaying } = this.state;
     const isOwner = Number(song.user.id) === user.user_id;
     return (
-      <TouchableWithoutFeedback onPress={() => this.goToSongPage(song.id)}>
+      <TouchableWithoutFeedback onPress={() => this.goToCardPage(song.id)}>
         <View style={Style.container}>
           <View style={Style.priceContainer}>
             <Image
@@ -135,6 +158,19 @@ class SongCard extends React.Component {
             <Text style={[Style.text, Style.coinText]}>
               {formatNum(song.price_value)}
             </Text>
+          </View>
+          <View style={Style.playContainer}>
+            <TouchableWithoutFeedback onPress={() => this.togglePlaying()}>
+              <Image
+                source={
+                  isPlaying
+                    ? require("../../assets/images/controls/pause.png")
+                    : require("../../assets/images/controls/play.png")
+                }
+                alt="play"
+                style={Style.play}
+              />
+            </TouchableWithoutFeedback>
           </View>
           <Image
             source={{ uri: song.album.images[0].url }}

@@ -154,6 +154,7 @@ export default class SongsScreen extends React.Component {
             tabs={TABS}
           />
           <CardGrid
+            navigation={navigation}
             songs={songs}
             user={me}
             canLoadMore={loadMoreSongs}
