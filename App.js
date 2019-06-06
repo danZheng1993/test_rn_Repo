@@ -37,7 +37,10 @@ export default class App extends React.Component {
         require("./assets/images/coins/coin.png"),
         require("./assets/images/coins/coinStack.png"),
         require("./assets/images/controls/pause.png"),
-        require("./assets/images/controls/play.png")
+        require("./assets/images/controls/play.png"),
+        require("./assets/images/controls/checkmark.png"),
+        require("./assets/images/controls/x.png"),
+        require("./assets/images/loading/loading.png")
       ]),
       Font.loadAsync({
         CircularPro: require("./assets/fonts/CircularPro-Medium.otf"),

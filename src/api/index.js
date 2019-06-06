@@ -302,3 +302,37 @@ export const getHistory = async Obj => {
     data: ""
   });
 };
+
+export const stealSong = async songId => {
+  const authHeaders = await getAuthHeaders();
+  return axios({
+    ...defaultHeaders,
+    method: "post",
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate(),
+      "Content-Type": "application/json",
+      "x-app-device": device,
+      ...authHeaders
+    },
+    url: `/music/songs/steal?songId=${songId}`,
+    data: ""
+  });
+};
+
+export const earningToCoins = async earningId => {
+  const authHeaders = await getAuthHeaders();
+  return axios({
+    ...defaultHeaders,
+    method: "post",
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate(),
+      "Content-Type": "application/json",
+      "x-app-device": device,
+      ...authHeaders
+    },
+    url: `/users/earnings?earningId=${earningId}`,
+    data: ""
+  });
+};

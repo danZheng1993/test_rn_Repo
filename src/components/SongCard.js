@@ -11,7 +11,9 @@ import {
 import MarqueeText from "react-native-marquee";
 
 import YellowButton from "./YellowButton";
+import SongBuyModal from "./Modals/SongBuyModal";
 import { formatNum } from "../utils";
+import { stealSong, earningToCoins } from "../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -113,8 +115,15 @@ class SongCard extends React.Component {
     showBuyModal: false,
     showShareModal: false,
     isPlaying: false,
+    isCollecting: false,
+    isOwner: false,
     soundObject: null
   };
+
+  componentDidMount() {
+    const { song, user } = this.props;
+    this.setState({ isOwner: Number(song.user.id) === user.user_id });
+  }
 
   togglePlaying = async () => {
     const { isPlaying } = this.state;
@@ -175,106 +184,137 @@ class SongCard extends React.Component {
     navigation.navigate("Card", { id });
   };
 
+  collectCard = async () => {
+    const { song } = this.props;
+
+    try {
+      this.setState({
+        isCollecting: true
+      });
+      await stealSong(song.id);
+      this.setState({
+        isOwner: true,
+        isCollecting: false
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
-    const { song, user } = this.props;
-    const { showBuyModal, showShareModal, isPlaying } = this.state;
-    const isOwner = Number(song.user.id) === user.user_id;
+    const { song } = this.props;
+    const {
+      showBuyModal,
+      showShareModal,
+      isPlaying,
+      isCollecting,
+      isOwner
+    } = this.state;
     return (
-      <TouchableWithoutFeedback onPress={() => this.goToCardPage(song.id)}>
-        <View style={Style.container}>
-          <View style={Style.priceContainer}>
-            <Image
-              source={require("../../assets/images/coins/coinStack.png")}
-              alt="coin stack"
-              style={Style.coinStack}
-            />
-            <Text style={[Style.text, Style.coinText]}>
-              {formatNum(song.price_value)}
-            </Text>
-          </View>
-          {song.preview_url ? (
-            <TouchableWithoutFeedback onPress={() => this.togglePlaying()}>
-              <View style={Style.playContainer}>
-                <Image
-                  source={
-                    isPlaying
-                      ? require("../../assets/images/controls/pause.png")
-                      : require("../../assets/images/controls/play.png")
-                  }
-                  alt="play"
-                  style={Style.play}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-          ) : (
-            <React.Fragment />
-          )}
-          <Image
-            source={{ uri: song.album.images[0].url }}
-            alt={song.name}
-            style={Style.album}
-            resizeMode="cover"
-          />
-          <View style={Style.contentContainer}>
-            <MarqueeText
-              style={[Style.text, Style.songNameText]}
-              duration={3000}
-              marqueeOnStart
-              loop
-              useNativeDriver
-            >
-              {song.name}
-            </MarqueeText>
-            <MarqueeText
-              style={[Style.text, Style.artistNameText]}
-              duration={3000}
-              marqueeOnStart
-              loop
-              useNativeDriver
-            >
-              {song.artists[0].name}
-            </MarqueeText>
-            <TouchableWithoutFeedback
-              onPress={() => this.goToProfile(song.user.id)}
-            >
-              <View style={Style.ownerContainer}>
-                <Image
-                  source={{
-                    uri:
-                      song.user.thumbnail_url !== null
-                        ? song.user.thumbnail_url
-                        : require("../../assets/images/placeholder/placeholder.png")
-                  }}
-                  alt={song.user.username}
-                  style={Style.ownerAvatar}
-                />
-                <View style={Style.belongsContainer}>
-                  <Text style={Style.text}>BELONGS TO</Text>
-                  <Text style={[Style.text, Style.ownerText]}>
-                    {song.user
-                      ? isOwner
-                        ? `YOU`
-                        : song.user.username
-                      : `NO ONE`}
-                  </Text>
+      <React.Fragment>
+        <SongBuyModal
+          isVisible={showBuyModal}
+          onRequestClose={this.closeBuyModal}
+          accept={this.collectCard}
+          song={song}
+          isCollecting={isCollecting}
+        />
+        <TouchableWithoutFeedback onPress={() => this.goToCardPage(song.id)}>
+          <View style={Style.container}>
+            <View style={Style.priceContainer}>
+              <Image
+                source={require("../../assets/images/coins/coinStack.png")}
+                alt="coin stack"
+                style={Style.coinStack}
+              />
+              <Text style={[Style.text, Style.coinText]}>
+                {formatNum(song.price_value)}
+              </Text>
+            </View>
+            {song.preview_url ? (
+              <TouchableWithoutFeedback onPress={() => this.togglePlaying()}>
+                <View style={Style.playContainer}>
+                  <Image
+                    source={
+                      isPlaying
+                        ? require("../../assets/images/controls/pause.png")
+                        : require("../../assets/images/controls/play.png")
+                    }
+                    alt="play"
+                    style={Style.play}
+                  />
                 </View>
-              </View>
-            </TouchableWithoutFeedback>
-            <YellowButton
-              text={isOwner ? `SHARE` : "BOOST"}
-              width="100%"
-              height={30}
-              marginRight={0}
-              marginLeft={0}
-              onPress={
-                isOwner
-                  ? () => this.openShareModal()
-                  : () => this.openBuyModal()
-              }
+              </TouchableWithoutFeedback>
+            ) : (
+              <React.Fragment />
+            )}
+            <Image
+              source={{ uri: song.album.images[0].url }}
+              alt={song.name}
+              style={Style.album}
+              resizeMode="cover"
             />
+            <View style={Style.contentContainer}>
+              <MarqueeText
+                style={[Style.text, Style.songNameText]}
+                duration={3000}
+                marqueeOnStart
+                loop
+                useNativeDriver
+              >
+                {song.name}
+              </MarqueeText>
+              <MarqueeText
+                style={[Style.text, Style.artistNameText]}
+                duration={3000}
+                marqueeOnStart
+                loop
+                useNativeDriver
+              >
+                {song.artists[0].name}
+              </MarqueeText>
+              <TouchableWithoutFeedback
+                onPress={() => this.goToProfile(song.user.id)}
+              >
+                <View style={Style.ownerContainer}>
+                  <Image
+                    source={{
+                      uri:
+                        song.user.thumbnail_url !== null
+                          ? song.user.thumbnail_url
+                          : require("../../assets/images/placeholder/placeholder.png")
+                    }}
+                    alt={song.user.username}
+                    style={Style.ownerAvatar}
+                  />
+                  <View style={Style.belongsContainer}>
+                    <Text style={Style.text}>BELONGS TO</Text>
+                    <Text style={[Style.text, Style.ownerText]}>
+                      {song.user
+                        ? isOwner
+                          ? `YOU`
+                          : song.user.username
+                        : `NO ONE`}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+              <YellowButton
+                text={isOwner ? `SHARE` : "BOOST"}
+                width="100%"
+                height={30}
+                marginRight={0}
+                marginLeft={0}
+                onPress={
+                  isOwner
+                    ? () => this.openShareModal()
+                    : () => this.openBuyModal()
+                }
+              />
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </React.Fragment>
     );
   }
 }

@@ -11,3 +11,6 @@ export { default as BackArrow } from "./BackArrow";
 export { default as ArtistCircle } from "./ArtistCircle";
 export { default as CardGrid } from "./CardGrid";
 export { default as SongCard } from "./SongCard";
+
+// Modals
+export { default as SongBuyModal } from "./Modals/SongBuyModal";
