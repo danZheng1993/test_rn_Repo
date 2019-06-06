@@ -37,7 +37,10 @@ const YellowButton = ({
   text = "GET STARTED",
   width,
   height,
-  margin,
+  marginTop = 8,
+  marginBottom = 8,
+  marginLeft = 8,
+  marginRight = 8,
   fontSize,
   disabled = false
 }) => (
@@ -50,7 +53,10 @@ const YellowButton = ({
               {
                 width: width || 110,
                 height: height || 36,
-                margin: margin || 8
+                marginTop,
+                marginBottom,
+                marginLeft,
+                marginRight
               }
             ]
           : [
@@ -58,7 +64,10 @@ const YellowButton = ({
               {
                 width: width || 110,
                 height: height || 36,
-                margin: margin || 8
+                marginTop,
+                marginBottom,
+                marginLeft,
+                marginRight
               }
             ]
       }
