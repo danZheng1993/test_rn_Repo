@@ -11,7 +11,7 @@ import {
 import MarqueeText from "react-native-marquee";
 
 import YellowButton from "./YellowButton";
-import SongBuyModal from "./Modals/ShareModal";
+import SongBuyModal from "./Modals/SongBuyModal";
 import SuccessModal from "./Modals/SuccessModal";
 import ShareModal from "./Modals/ShareModal";
 import { formatNum } from "../utils";
