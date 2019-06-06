@@ -14,3 +14,5 @@ export { default as SongCard } from "./SongCard";
 
 // Modals
 export { default as SongBuyModal } from "./Modals/SongBuyModal";
+export { default as SuccessModal } from "./Modals/SuccessModal";
+export { default as ShareModal } from "./Modals/ShareModal";

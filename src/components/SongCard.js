@@ -11,7 +11,9 @@ import {
 import MarqueeText from "react-native-marquee";
 
 import YellowButton from "./YellowButton";
-import SongBuyModal from "./Modals/SongBuyModal";
+import SongBuyModal from "./Modals/ShareModal";
+import SuccessModal from "./Modals/SuccessModal";
+import ShareModal from "./Modals/ShareModal";
 import { formatNum } from "../utils";
 import { stealSong, earningToCoins } from "../api";
 
@@ -113,6 +115,7 @@ const Style = StyleSheet.create({
 class SongCard extends React.Component {
   state = {
     showBuyModal: false,
+    showSuccessModal: false,
     showShareModal: false,
     isPlaying: false,
     isCollecting: false,
@@ -171,6 +174,9 @@ class SongCard extends React.Component {
   openBuyModal = () => this.setState({ showBuyModal: true });
   closeBuyModal = () => this.setState({ showBuyModal: false });
 
+  openSuccessModal = () => this.setState({ showSuccessModal: true });
+  closeSuccessModal = () => this.setState({ showSuccessModal: false });
+
   openShareModal = () => this.setState({ showShareModal: true });
   closeShareModal = () => this.setState({ showShareModal: false });
 
@@ -194,7 +200,8 @@ class SongCard extends React.Component {
       await stealSong(song.id);
       this.setState({
         isOwner: true,
-        isCollecting: false
+        isCollecting: false,
+        showSuccessModal: true
       });
     } catch (error) {
       console.log(error);
@@ -206,6 +213,7 @@ class SongCard extends React.Component {
     const {
       showBuyModal,
       showShareModal,
+      showSuccessModal,
       isPlaying,
       isCollecting,
       isOwner
@@ -218,6 +226,17 @@ class SongCard extends React.Component {
           accept={this.collectCard}
           song={song}
           isCollecting={isCollecting}
+        />
+        <SuccessModal
+          isVisible={showSuccessModal}
+          onRequestClose={this.closeSuccessModal}
+          accept={this.openShareModal}
+          song={song}
+        />
+        <ShareModal
+          isVisible={showShareModal}
+          onRequestClose={this.closeShareModal}
+          song={song}
         />
         <TouchableWithoutFeedback onPress={() => this.goToCardPage(song.id)}>
           <View style={Style.container}>
