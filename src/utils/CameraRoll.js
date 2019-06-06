@@ -1,5 +1,6 @@
 import { Alert } from "react-native";
-import { Permissions, ImagePicker } from "expo";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 
 const GetCameraRollPermissions = async () => {
   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);

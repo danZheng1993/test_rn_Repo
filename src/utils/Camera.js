@@ -1,5 +1,6 @@
 import { Alert } from "react-native";
-import { Permissions, ImagePicker } from "expo";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 import { GetCameraRollPermissions } from "./CameraRoll";
 
 export const GetCameraPermissions = async () => {
