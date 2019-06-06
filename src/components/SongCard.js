@@ -10,12 +10,14 @@ import {
 } from "react-native";
 import MarqueeText from "react-native-marquee";
 
+import { formatNum } from "../utils";
+import { stealSong, earningToCoins } from "../api";
+
 import YellowButton from "./YellowButton";
 import SongBuyModal from "./Modals/SongBuyModal";
 import SuccessModal from "./Modals/SuccessModal";
 import ShareModal from "./Modals/ShareModal";
-import { formatNum } from "../utils";
-import { stealSong, earningToCoins } from "../api";
+import CardModal from "./Modals/CardModal";
 
 const Style = StyleSheet.create({
   container: {
@@ -117,6 +119,7 @@ class SongCard extends React.Component {
     showBuyModal: false,
     showSuccessModal: false,
     showShareModal: false,
+    showCardModal: false,
     isPlaying: false,
     isCollecting: false,
     isOwner: false,
@@ -177,17 +180,24 @@ class SongCard extends React.Component {
   openSuccessModal = () => this.setState({ showSuccessModal: true });
   closeSuccessModal = () => this.setState({ showSuccessModal: false });
 
-  openShareModal = () => this.setState({ showShareModal: true });
+  openShareModal = () =>
+    this.setState({ showSuccessModal: false, showShareModal: true });
   closeShareModal = () => this.setState({ showShareModal: false });
+
+  openCardModal = () => this.setState({ showCardModal: true });
+  closeCardModal = () => this.setState({ showCardModal: false });
 
   goToProfile = id => {
     const { navigation } = this.props;
+    console.log("going to profile: ", id);
     navigation.navigate("Profile", { id });
   };
 
   goToCardPage = id => {
-    const { navigation } = this.props;
-    navigation.navigate("Card", { id });
+    console.log("going to card: ", id);
+    this.setState({
+      showCardModal: true
+    });
   };
 
   collectCard = async () => {
@@ -201,6 +211,7 @@ class SongCard extends React.Component {
       this.setState({
         isOwner: true,
         isCollecting: false,
+        showBuyModal: false,
         showSuccessModal: true
       });
     } catch (error) {
@@ -209,11 +220,12 @@ class SongCard extends React.Component {
   };
 
   render() {
-    const { song } = this.props;
+    const { song, navigation, user, nonInteractable = false } = this.props;
     const {
       showBuyModal,
       showShareModal,
       showSuccessModal,
+      showCardModal,
       isPlaying,
       isCollecting,
       isOwner
@@ -238,7 +250,21 @@ class SongCard extends React.Component {
           onRequestClose={this.closeShareModal}
           song={song}
         />
-        <TouchableWithoutFeedback onPress={() => this.goToCardPage(song.id)}>
+        {!nonInteractable && (
+          <CardModal
+            isVisible={showCardModal}
+            onRequestClose={this.closeCardModal}
+            song={song}
+            user={user}
+            navigation={navigation}
+            openShareModal={this.openShareModal}
+          />
+        )}
+        <TouchableWithoutFeedback
+          onPress={
+            nonInteractable ? () => {} : () => this.goToCardPage(song.id)
+          }
+        >
           <View style={Style.container}>
             <View style={Style.priceContainer}>
               <Image
