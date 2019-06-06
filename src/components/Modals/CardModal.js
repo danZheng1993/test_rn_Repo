@@ -14,7 +14,9 @@ const Style = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-evenly",
     alignItems: "center",
-    alignContent: "center"
+    alignContent: "center",
+    paddingLeft: 16,
+    paddingRight: 16
   },
   headerContainer: {
     width: "100%",
