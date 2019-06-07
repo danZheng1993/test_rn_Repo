@@ -285,7 +285,9 @@ class SongCard extends React.Component {
       showCardModal,
       isPlaying,
       isCollecting,
-      isOwner
+      isOwner,
+      price,
+      earnings
     } = this.state;
     return (
       <React.Fragment>
@@ -332,7 +334,7 @@ class SongCard extends React.Component {
                 style={Style.coinStack}
               />
               <Text style={[Style.text, Style.coinText]}>
-                {formatNum(song.price_value)}
+                {formatNum(price)}
               </Text>
             </View>
             {song.preview_url ? (
