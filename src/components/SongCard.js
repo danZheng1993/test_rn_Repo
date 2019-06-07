@@ -120,6 +120,8 @@ const Style = StyleSheet.create({
   }
 });
 
+// TODO: earnings design
+
 class SongCard extends React.Component {
   state = {
     showBuyModal: false,
