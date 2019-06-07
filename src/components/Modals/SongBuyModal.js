@@ -60,7 +60,8 @@ const SongBuyModal = ({
   onRequestClose,
   accept,
   song,
-  isCollecting = false
+  isCollecting = false,
+  price
 }) => {
   const spinValue = new Animated.Value(0);
   Animated.loop(
@@ -92,7 +93,7 @@ const SongBuyModal = ({
               ? `Attempting to boost...`
               : `Collect ${song.name} by ${
                   song.artists[0].name
-                } for ${formatNum(song.price_value)}?`}
+                } for ${formatNum(price)}?`}
           </Text>
           {isCollecting ? (
             <View style={Style.loadingContainer}>

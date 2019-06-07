@@ -128,9 +128,9 @@ class SongCard extends React.Component {
     earnings: []
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
     this.updateEarnings();
-  }
+  };
 
   updateEarnings = async () => {
     const {
@@ -173,8 +173,9 @@ class SongCard extends React.Component {
 
   decrementPrice = async intervals => {
     const { price } = this.state;
+    const newPrice = price - intervals;
     this.setState({
-      price: price - intervals
+      price: newPrice.toString()
     });
   };
 
@@ -270,6 +271,21 @@ class SongCard extends React.Component {
     }
   };
 
+  collectEarning = async (e, earning) => {
+    const { earnings } = this.state;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+
+    const res = await earningToCoins(earning.id);
+    if (res.data.coins) {
+      const tempEarnings = earnings.slice();
+      tempEarnings.shift();
+      this.setState({ earnings: tempEarnings });
+    } else {
+      console.error(res);
+    }
+  };
+
   render() {
     const {
       song,
@@ -297,6 +313,7 @@ class SongCard extends React.Component {
           accept={this.collectCard}
           song={song}
           isCollecting={isCollecting}
+          price={price}
         />
         <SuccessModal
           isVisible={showSuccessModal}
