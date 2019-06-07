@@ -1,5 +1,12 @@
 import React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  Linking,
+  TouchableOpacity
+} from "react-native";
 import Modal from "react-native-modal";
 
 import SongCard from "../SongCard";
@@ -101,14 +108,16 @@ const CardModal = ({
         />
         <YellowButton text="SHARE SONG" onPress={() => openShareModal()} />
       </View>
-      <View style={Style.spotifyContainer}>
-        <Text style={Style.text}>Listen on</Text>
-        <Image
-          style={Style.spotify}
-          source={require("../../../assets/images/logos/spotify.png")}
-          alt="Listen on Spotify"
-        />
-      </View>
+      <TouchableOpacity onPress={() => Linking.openURL(song.spotify_url)}>
+        <View style={Style.spotifyContainer}>
+          <Text style={Style.text}>Listen on</Text>
+          <Image
+            style={Style.spotify}
+            source={require("../../../assets/images/logos/spotify.png")}
+            alt="Listen on Spotify"
+          />
+        </View>
+      </TouchableOpacity>
     </View>
   </Modal>
 );
