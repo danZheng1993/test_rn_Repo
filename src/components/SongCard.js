@@ -68,6 +68,9 @@ const Style = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between"
   },
+  earningContainer: {},
+  coinStackContainer: {},
+  earningFooter: {},
   text: {
     fontFamily: "CircularProBook",
     fontSize: 10,
@@ -92,6 +95,7 @@ const Style = StyleSheet.create({
     fontFamily: "CircularProBold",
     fontSize: 15
   },
+  earningsText: {},
   album: {
     height: 100,
     width: 141,
@@ -109,6 +113,8 @@ const Style = StyleSheet.create({
     height: 16,
     marginRight: 4
   },
+  blackCoin: {},
+  earning: {},
   play: {
     width: 20
   }
@@ -147,7 +153,7 @@ class SongCard extends React.Component {
     const myEarnings = [];
     let isOwner = false;
     if (song.user) {
-      isOwner = Number(song.user.id) === user.user_id;
+      isOwner = Number(song.user.id) === "1149" /* user.user_id */;
       if (user_earnings) {
         await user_earnings.forEach(e => {
           if (user.user_id === Number(e.user_id) && !Number(e.is_converted)) {
@@ -401,12 +407,15 @@ class SongCard extends React.Component {
               >
                 <View style={Style.ownerContainer}>
                   <Image
-                    source={{
-                      uri:
-                        song.user.thumbnail_url !== null
-                          ? song.user.thumbnail_url
+                    source={
+                      song.user
+                        ? song.user.thumbnail_url
+                          ? {
+                              uri: song.user.thumbnail_url
+                            }
                           : require("../../assets/images/placeholder/placeholder.png")
-                    }}
+                        : require("../../assets/images/placeholder/placeholder.png")
+                    }
                     alt={song.user.username}
                     style={Style.ownerAvatar}
                   />
@@ -434,6 +443,34 @@ class SongCard extends React.Component {
                     : () => this.openBuyModal()
                 }
               />
+              {earnings.length > 0 && (
+                <TouchableWithoutFeedback
+                  onPress={e => this.collectEarning(e, earnings[0])}
+                >
+                  <View style={Style.earningContainer}>
+                    <View style={Style.earningFooter}>
+                      <Text style={[Style.text, Style.earningsText]}>
+                        GET EARNINGS
+                      </Text>
+                      <Image
+                        style={Style.blackCoin}
+                        src={require("../../assets/images/coins/blackCoins.png")}
+                        alt="earningCoin"
+                      />
+                      <Text style={[Style.text, Style.earningsText]}>
+                        {formatNum(earnings[0].amount)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={Style.coinStackContainer}>
+                    <Image
+                      style={Style.earning}
+                      src={require("../../assets/images/coins/earningsStack.png")}
+                      alt="Stack of coins"
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
             </View>
           </View>
         </TouchableWithoutFeedback>
