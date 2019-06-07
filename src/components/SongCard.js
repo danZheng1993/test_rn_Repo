@@ -126,6 +126,7 @@ class SongCard extends React.Component {
     showSuccessModal: false,
     showShareModal: false,
     showCardModal: false,
+    notEnoughCoins: false,
     isPlaying: false,
     isCollecting: false,
     isOwner: false,
@@ -153,7 +154,7 @@ class SongCard extends React.Component {
     const myEarnings = [];
     let isOwner = false;
     if (song.user) {
-      isOwner = Number(song.user.id) === "1149" /* user.user_id */;
+      isOwner = Number(song.user.id) === user.user_id;
       if (user_earnings) {
         await user_earnings.forEach(e => {
           if (user.user_id === Number(e.user_id) && !Number(e.is_converted)) {
@@ -241,6 +242,9 @@ class SongCard extends React.Component {
   openCardModal = () => this.setState({ showCardModal: true });
   closeCardModal = () => this.setState({ showCardModal: false });
 
+  openPurchaseModal = () => this.setState({ showPurchaseModal: true });
+  closePurchaseModal = () => this.setState({ showPurchaseModal: false });
+
   goToProfile = id => {
     const { navigation } = this.props;
     console.log("going to profile: ", id);
@@ -259,12 +263,17 @@ class SongCard extends React.Component {
   };
 
   collectCard = async () => {
-    const { song } = this.props;
+    const { song, user } = this.props;
+    const { price } = this.state;
 
     try {
       this.setState({
         isCollecting: true
       });
+      if (parseInt(price, 10) > parseInt(user.coins, 10)) {
+        await this.setState({ isCollecting: false, notEnoughCoins: true });
+        return;
+      }
       await stealSong(song.id);
       this.setState({
         isOwner: true,
@@ -309,17 +318,19 @@ class SongCard extends React.Component {
       isCollecting,
       isOwner,
       price,
-      earnings
+      earnings,
+      notEnoughCoins
     } = this.state;
     return (
       <React.Fragment>
         <SongBuyModal
           isVisible={showBuyModal}
           onRequestClose={this.closeBuyModal}
-          accept={this.collectCard}
+          accept={notEnoughCoins ? this.openPurchaseModal : this.collectCard}
           song={song}
           isCollecting={isCollecting}
           price={price}
+          notEnoughCoins={notEnoughCoins}
         />
         <SuccessModal
           isVisible={showSuccessModal}

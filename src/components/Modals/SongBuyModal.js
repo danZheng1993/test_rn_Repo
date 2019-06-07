@@ -61,7 +61,8 @@ const SongBuyModal = ({
   accept,
   song,
   isCollecting = false,
-  price
+  price,
+  notEnoughCoins = false
 }) => {
   const spinValue = new Animated.Value(0);
   Animated.loop(
@@ -89,7 +90,9 @@ const SongBuyModal = ({
       <View style={Style.container}>
         <View style={Style.contentContainer}>
           <Text style={Style.text}>
-            {isCollecting
+            {notEnoughCoins
+              ? `Not enough coins to collect this song.`
+              : isCollecting
               ? `Attempting to boost...`
               : `Collect ${song.name} by ${
                   song.artists[0].name
