@@ -123,13 +123,60 @@ class SongCard extends React.Component {
     isPlaying: false,
     isCollecting: false,
     isOwner: false,
-    soundObject: null
+    soundObject: null,
+    price: this.props.song.price_value,
+    earnings: []
   };
 
   componentDidMount() {
-    const { song, user } = this.props;
-    this.setState({ isOwner: Number(song.user.id) === user.user_id });
+    this.updateEarnings();
   }
+
+  updateEarnings = async () => {
+    const {
+      song,
+      song: { user_earnings },
+      config: { price_decrease_threshold },
+      user
+    } = this.props;
+    const { price } = this.state;
+
+    if (price > Number(price_decrease_threshold)) {
+      this.startTimer();
+    }
+    const myEarnings = [];
+    let isOwner = false;
+    if (song.user) {
+      isOwner = Number(song.user.id) === user.user_id;
+      if (user_earnings) {
+        await user_earnings.forEach(e => {
+          if (user.user_id === Number(e.user_id) && !Number(e.is_converted)) {
+            myEarnings.push(e);
+          }
+        });
+      }
+    }
+    this.setState({
+      earnings: myEarnings,
+      isOwner
+    });
+  };
+
+  startTimer = async () => {
+    const interval = Math.floor(Math.random() * 7 + 1);
+
+    setTimeout(() => {
+      this.decrementPrice(interval);
+      this.startTimer();
+    }, interval * 1000);
+  };
+
+  decrementPrice = async intervals => {
+    const { price } = this.state;
+    this.setState({
+      price: price - intervals
+    });
+  };
 
   togglePlaying = async () => {
     const { isPlaying } = this.state;
@@ -200,6 +247,10 @@ class SongCard extends React.Component {
     });
   };
 
+  openFirstBoosterProfile = () => {
+    // TODO: Implement, awaiting back end changed
+  };
+
   collectCard = async () => {
     const { song } = this.props;
 
@@ -220,7 +271,13 @@ class SongCard extends React.Component {
   };
 
   render() {
-    const { song, navigation, user, nonInteractable = false } = this.props;
+    const {
+      song,
+      navigation,
+      user,
+      nonInteractable = false,
+      config
+    } = this.props;
     const {
       showBuyModal,
       showShareModal,
@@ -258,6 +315,8 @@ class SongCard extends React.Component {
             user={user}
             navigation={navigation}
             openShareModal={this.openShareModal}
+            openFirstBoosterProfile={this.openFirstBoosterProfile}
+            config={config}
           />
         )}
         <TouchableWithoutFeedback

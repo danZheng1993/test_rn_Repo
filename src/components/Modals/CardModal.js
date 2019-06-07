@@ -73,7 +73,9 @@ const CardModal = ({
   song,
   user,
   navigation,
-  openShareModal
+  openShareModal,
+  openFirstBoosterProfile,
+  config
 }) => (
   <Modal
     isVisible={isVisible}
@@ -93,11 +95,14 @@ const CardModal = ({
         user={user}
         navigation={navigation}
         nonInteractable
+        config={config}
       />
       <View style={Style.firstContainer}>
         <Text style={Style.text}>1st Booster</Text>
-        <Text style={Style.text}>Julie200</Text>
-        {/* <Image style={Style.avatar} source={} alt="Julie200"/> */}
+        <TouchableOpacity onPress={() => openFirstBoosterProfile()}>
+          <Text style={Style.text}>Julie200</Text>
+          {/* <Image style={Style.avatar} source={} alt="Julie200"/> */}
+        </TouchableOpacity>
       </View>
       <View style={Style.buttonContainer}>
         <YellowButton
