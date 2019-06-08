@@ -1,5 +1,12 @@
 import React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  Linking,
+  TouchableOpacity
+} from "react-native";
 import Modal from "react-native-modal";
 
 import SongCard from "../SongCard";
@@ -66,7 +73,9 @@ const CardModal = ({
   song,
   user,
   navigation,
-  openShareModal
+  openShareModal,
+  openFirstBoosterProfile,
+  config
 }) => (
   <Modal
     isVisible={isVisible}
@@ -86,11 +95,14 @@ const CardModal = ({
         user={user}
         navigation={navigation}
         nonInteractable
+        config={config}
       />
       <View style={Style.firstContainer}>
         <Text style={Style.text}>1st Booster</Text>
-        <Text style={Style.text}>Julie200</Text>
-        {/* <Image style={Style.avatar} source={} alt="Julie200"/> */}
+        <TouchableOpacity onPress={() => openFirstBoosterProfile()}>
+          <Text style={Style.text}>Julie200</Text>
+          {/* <Image style={Style.avatar} source={} alt="Julie200"/> */}
+        </TouchableOpacity>
       </View>
       <View style={Style.buttonContainer}>
         <YellowButton
@@ -101,14 +113,16 @@ const CardModal = ({
         />
         <YellowButton text="SHARE SONG" onPress={() => openShareModal()} />
       </View>
-      <View style={Style.spotifyContainer}>
-        <Text style={Style.text}>Listen on</Text>
-        <Image
-          style={Style.spotify}
-          source={require("../../../assets/images/logos/spotify.png")}
-          alt="Listen on Spotify"
-        />
-      </View>
+      <TouchableOpacity onPress={() => Linking.openURL(song.spotify_url)}>
+        <View style={Style.spotifyContainer}>
+          <Text style={Style.text}>Listen on</Text>
+          <Image
+            style={Style.spotify}
+            source={require("../../../assets/images/logos/spotify.png")}
+            alt="Listen on Spotify"
+          />
+        </View>
+      </TouchableOpacity>
     </View>
   </Modal>
 );

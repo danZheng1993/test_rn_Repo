@@ -1,4 +1,4 @@
-import { Permissions } from "expo";
+import * as Permissions from "expo-permissions";
 
 const GetNotificationPermissions = async () => {
   const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);

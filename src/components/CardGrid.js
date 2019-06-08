@@ -3,6 +3,9 @@ import { View, FlatList, StyleSheet } from "react-native";
 
 import SongCard from "./SongCard";
 import RoundButton from "./RoundButton";
+import LoadingIndicator from "./LoadingIndicator";
+
+import { getCoinRules } from "../api";
 
 const Style = StyleSheet.create({
   container: {
@@ -22,6 +25,14 @@ const Style = StyleSheet.create({
 class CardGrid extends React.Component {
   state = {
     // TODO: Song playing logic
+    config: null
+  };
+
+  componentDidMount = async () => {
+    const configResp = await getCoinRules();
+    this.setState({
+      config: configResp.data
+    });
   };
 
   render() {
@@ -32,6 +43,8 @@ class CardGrid extends React.Component {
       loadMoreSongs,
       navigation
     } = this.props;
+    const { config } = this.state;
+    if (config === null) return <LoadingIndicator />;
     return (
       <View style={Style.container}>
         <FlatList
@@ -41,7 +54,12 @@ class CardGrid extends React.Component {
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <View style={Style.cardContainer}>
-              <SongCard song={item} user={user} navigation={navigation} />
+              <SongCard
+                song={item}
+                user={user}
+                navigation={navigation}
+                config={config}
+              />
             </View>
           )}
           ListFooterComponent={() => {

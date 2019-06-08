@@ -1,5 +1,6 @@
 import { Alert } from "react-native";
-import { Permissions, Contacts } from "expo";
+import * as Contacts from "expo-contacts";
+import * as Permissions from "expo-permissions";
 
 const GetContactsPermissions = async () => {
   const { status } = await Permissions.askAsync(Permissions.CONTACTS);

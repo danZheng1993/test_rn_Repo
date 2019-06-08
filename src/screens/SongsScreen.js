@@ -53,8 +53,10 @@ export default class SongsScreen extends React.Component {
   componentDidMount = async () => {
     // TODO: Pubnub integration
     const resp = await getMe();
+    await this.setState({ me: resp.data.user });
+
     await this.updateSongCards();
-    await this.setState({ me: resp.data.user, loading: false });
+    await this.setState({ loading: false });
   };
 
   handleTabChange = async tab => {

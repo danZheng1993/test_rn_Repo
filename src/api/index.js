@@ -336,3 +336,20 @@ export const earningToCoins = async earningId => {
     data: ""
   });
 };
+
+export const getCoinRules = async () => {
+  const authHeaders = await getAuthHeaders();
+  return axios({
+    ...defaultHeaders,
+    method: "get",
+    headers: {
+      ...defaultHeaders.headers,
+      "x-app-date": getNewDate(),
+      "Content-Type": "application/json",
+      "x-app-device": device,
+      ...authHeaders
+    },
+    url: `/config/coin-rules`,
+    data: ""
+  });
+};
