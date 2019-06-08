@@ -56,7 +56,7 @@ const SuccessModal = ({ isVisible = false, onRequestClose, accept, song }) => (
   >
     <View style={Style.container}>
       <View style={Style.contentContainer}>
-        <Text style={Style.text}>{`Success`}</Text>
+        <Text style={Style.text}>Success</Text>
         <View style={Style.buttonContainer}>
           <TouchableOpacity onPress={() => onRequestClose()}>
             <Image

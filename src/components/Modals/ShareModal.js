@@ -56,7 +56,7 @@ const ShareModal = ({ isVisible = false, onRequestClose, song }) => (
   >
     <View style={Style.container}>
       <View style={Style.contentContainer}>
-        <Text style={Style.text}>{`Share`}</Text>
+        <Text style={Style.text}>Share</Text>
         <View style={Style.buttonContainer}>
           <TouchableOpacity onPress={() => onRequestClose()}>
             <Image
